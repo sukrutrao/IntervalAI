@@ -27,8 +27,8 @@ inline std::pair<INT, INT> Interval::get_limits() {
 
 void Interval::invariant() {
 	assert(low <= high);
-	assert(low >= limits.first);
-	assert(high <= limits.second);
+	if(low < limits.first) low = limits.first;
+	if(high > limits.second) high = limits.second;
 }
 
 Interval Interval::operator+(const Interval& other) {

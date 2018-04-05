@@ -1,12 +1,12 @@
 #ifndef INTERVAL_DOMAIN_H
 #define INTERVAL_DOMAIN_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <utility>
 
 namespace intervalai {
 	
-typedef int32_t INT;
+typedef std::int32_t INT;
 
 class Interval {
 
