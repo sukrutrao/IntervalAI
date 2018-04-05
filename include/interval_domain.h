@@ -11,19 +11,22 @@ typedef std::int32_t INT;
 class Interval {
 
 private:
+	bool is_bot;
 	INT low;
 	INT high;
-	const std::pair<INT, INT> limits;
 	void invariant();
 public:
-	Interval();
+	Interval(bool is_bot = false);
 	Interval(INT, INT);
+	Interval(const Interval&);
 	Interval operator+(const Interval&);
 	Interval operator-(const Interval&);
 	Interval operator*(const Interval&);
 	Interval operator/(const Interval&);
 	Interval operator-();
-	std::pair<INT, INT> get_limits();
+	Interval operator&(const Interval&);
+	Interval operator|(const Interval&);
+	static inline std::pair<INT, INT> get_limits();
 };
 
 }
