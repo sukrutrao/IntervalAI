@@ -1,7 +1,8 @@
 #ifndef INTERVAL_DOMAIN_H
 #define INTERVAL_DOMAIN_H
 
-#include <iostream>
+#include <stdint.h>
+#include <utility>
 
 namespace intervalai {
 	
@@ -17,10 +18,10 @@ private:
 public:
 	Interval();
 	Interval(INT, INT);
-	Interval operator+(const &Interval);
-	Interval operator-(const &Interval);
-	Interval operator*(const &Interval);
-	Interval operator/(const &Interval);
+	Interval operator+(const Interval&);
+	Interval operator-(const Interval&);
+	Interval operator*(const Interval&);
+	Interval operator/(const Interval&);
 	Interval operator-();
 	std::pair<INT, INT> get_limits();
 };

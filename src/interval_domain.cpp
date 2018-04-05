@@ -1,19 +1,21 @@
 #include "interval_domain.h"
 
-#include <limit>
+#include <limits>
 #include <cmath>
+#include <cassert>
+#include <algorithm>
 
-Interval::Interval() {
-	limits = std::make_pair(std::numeric_limits<INT>::min()/2, 
-						std::numeric_limits<INT>::max()/2);
+using namespace intervalai;
+
+Interval::Interval() : limits(std::make_pair(std::numeric_limits<INT>::min()/2, 
+						std::numeric_limits<INT>::max()/2)) {
 	low = limits.first;
 	high = limits.second;
 	invariant();
 }
 
-Interval::Interval(INT low, INT high) {
-	limits = std::make_pair(std::numeric_limits<INT>::min()/2, 
-						std::numeric_limits<INT>::max()/2);
+Interval::Interval(INT low, INT high) : limits(std::make_pair(std::numeric_limits<INT>::min()/2, 
+						std::numeric_limits<INT>::max()/2))  {
 	this->low = low;
 	this->high = high;
 	invariant();
@@ -38,7 +40,7 @@ Interval Interval::operator+(const Interval& other) {
 }
 
 Interval Interval::operator-(const Interval& other) {
-	return (*this) + (-other);
+	return operator+(operator-(other));
 }
 
 Interval Interval::operator*(const Interval& other) {
@@ -64,7 +66,7 @@ Interval Interval::operator*(const Interval& other) {
 		}
 	} else {
 		if(this->high > 0 && other.high > 0) {
-			result.low = min(this->low * other.high, this->high * other.low);
+			result.low=std::min(this->low * other.high, this->high * other.low);
 			result.high = this->high * other.high;
 		} else if(this->high > 0 && other.high <= 0) {
 			result.low = other.low * this->high;
