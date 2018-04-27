@@ -9,5 +9,20 @@ include_directories(include)
 include_directories(cbmc/src)
 
 file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE OBJS "cbmc/*.o")
 
-add_executable(IntervalAI ${SOURCES})
+FOREACH(item ${OBJS})
+	IF(${item} MATCHES "main.o")
+		LIST(REMOVE_ITEM OBJS ${item})
+	ENDIF(${item} MATCHES "main.o")
+	IF(${item} MATCHES "test.o")
+		LIST(REMOVE_ITEM OBJS ${item})
+	ENDIF(${item} MATCHES "test.o")
+ENDFOREACH(item)
+
+file(GLOB_RECURSE DOMAIN_OBJS "cbmc/*_domain.o")
+
+LIST(APPEND OBJS cbmc/src/goto-symex/symex_main.o)
+LIST(APPEND OBJS ${DOMAIN_OBJS})
+
+add_executable(IntervalAI ${SOURCES} ${OBJS})
