@@ -6,7 +6,8 @@
 
 namespace intervalai {
 
-typedef std::int32_t INT;
+typedef std::int64_t INT;
+typedef std::int32_t DOMAIN_INT;
 
 class Interval {
 
@@ -20,6 +21,7 @@ class Interval {
   public:
     Interval(bool is_bot = false);
     Interval(INT, INT);
+    Interval(std::pair<INT, INT>);
     Interval(const Interval &);
 
     Interval operator+(const Interval &);
@@ -35,9 +37,15 @@ class Interval {
     Interval operator-();
     Interval operator&(const Interval &);
     Interval operator|(const Interval &);
+
     static inline std::pair<INT, INT> get_limits();
     static inline INT max_value();
     static inline INT min_value();
+    static inline std::pair<INT, INT> top_limits();
+
+    bool isTop();
+    bool isBot();
+    std::pair<INT, INT> getInterval();
 };
 
 } // namespace intervalai

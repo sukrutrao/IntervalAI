@@ -24,6 +24,13 @@ Interval::Interval(INT low, INT high) {
     invariant();
 }
 
+Interval::Interval(std::pair<INT, INT> interval_limits) {
+    is_bot = false;
+    this->low = interval_limits.first;
+    this->high = interval_limits.second;
+    invariant();
+}
+
 Interval::Interval(const Interval &other) {
     this->is_bot = other.is_bot;
     this->low = other.low;
@@ -34,18 +41,26 @@ inline std::pair<INT, INT> Interval::get_limits() {
     return std::make_pair(min_value(), max_value());
 }
 
-inline INT Interval::max_value() { return std::numeric_limits<INT>::max() / 2; }
+inline std::pair<INT, INT> Interval::top_limits() {
+    return std::make_pair(min_value() - 1, max_value() + 1);
+}
 
-inline INT Interval::min_value() { return std::numeric_limits<INT>::min() / 2; }
+inline INT Interval::max_value() {
+    return std::numeric_limits<DOMAIN_INT>::max();
+}
+
+inline INT Interval::min_value() {
+    return std::numeric_limits<DOMAIN_INT>::min();
+}
 
 void Interval::invariant() {
     if (is_bot)
         return;
     assert(low <= high);
     std::pair<INT, INT> limits = get_limits();
-    if (low < limits.first)
+    if (low < limits.first - 1)
         low = limits.first;
-    if (high > limits.second)
+    if (high > limits.second + 1)
         high = limits.second;
 }
 
@@ -108,13 +123,14 @@ Interval Interval::operator*(const Interval &other) {
     return result;
 }
 
-Interval Interval::operator/(const Interval &other) {
-    Interval result;
-    if (this->is_bot || other.is_bot) {
-        result.is_bot = true;
-    } else {
-    }
-}
+// Interval Interval::operator/(const Interval &other) {
+//     Interval result;
+//     if (this->is_bot || other.is_bot) {
+//         result.is_bot = true;
+//     } else if() {
+//         result.low = this->low /
+//     }
+// }
 
 Interval Interval::operator-() {
     Interval result;
@@ -223,4 +239,19 @@ INT Interval::lowest_magnitude() {
     } else {
         return 0;
     }
+}
+
+bool Interval::isTop() {
+    auto limits = top_limits();
+    if (!is_bot && limits.first == low && limits.second == high) {
+        return true;
+    }
+    return false;
+}
+
+bool Interval::isBot() { return is_bot; }
+
+// must be used only when not bot
+std::pair<INT, INT> Interval::getInterval() {
+    return std::make_pair(low, high);
 }
