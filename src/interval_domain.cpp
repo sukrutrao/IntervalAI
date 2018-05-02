@@ -17,6 +17,13 @@ Interval::Interval(bool is_bot) {
     invariant();
 }
 
+Interval::Interval(INT value) {
+    is_bot = false;
+    low = value;
+    high = value;
+    invariant();
+}
+
 Interval::Interval(INT low, INT high) {
     is_bot = false;
     this->low = low;
@@ -57,10 +64,10 @@ void Interval::invariant() {
     if (is_bot)
         return;
     assert(low <= high);
-    std::pair<INT, INT> limits = get_limits();
-    if (low < limits.first - 1)
+    std::pair<INT, INT> limits = top_limits();
+    if (low < limits.first)
         low = limits.first;
-    if (high > limits.second + 1)
+    if (high > limits.second)
         high = limits.second;
 }
 
@@ -77,7 +84,7 @@ Interval Interval::operator+(const Interval &other) const {
 }
 
 Interval Interval::operator-(const Interval &other) const {
-    return operator+(operator-(other));
+    return operator+(-other);
 }
 
 Interval Interval::operator*(const Interval &other) const {
@@ -132,7 +139,7 @@ Interval Interval::operator*(const Interval &other) const {
 //     }
 // }
 
-Interval Interval::operator-() {
+Interval Interval::operator-() const {
     Interval result;
     if (this->is_bot) {
         result.is_bot = true;
@@ -199,7 +206,7 @@ Interval Interval::operator/(INT other) {
 }
 
 // Meet
-Interval Interval::operator&(const Interval &other) {
+Interval Interval::operator&(const Interval &other) const {
     Interval result;
     if (this->is_bot || other.is_bot) {
         result.is_bot = true;
@@ -214,7 +221,7 @@ Interval Interval::operator&(const Interval &other) {
 }
 
 // Join
-Interval Interval::operator|(const Interval &other) {
+Interval Interval::operator|(const Interval &other) const {
     Interval result;
     if (this->is_bot) {
         result = other;
@@ -251,7 +258,42 @@ bool Interval::isTop() {
 
 bool Interval::isBot() { return is_bot; }
 
+inline INT Interval::length() const {
+    if (is_bot) {
+        return 0;
+    }
+    return high - low;
+}
+
 // must be used only when not bot
 std::pair<INT, INT> Interval::getInterval() {
     return std::make_pair(low, high);
+}
+
+tribool Interval::operator<(const Interval &other) const {
+    if (this->is_bot || other.is_bot) {
+        return tribool::False;
+    }
+    if (this->high < other.low) {
+        return tribool::True;
+    }
+    return tribool::False;
+}
+
+tribool Interval::operator>(const Interval &other) const {
+    return other.operator<(*this);
+}
+
+tribool Interval::operator==(const Interval &other) const {
+    if (this->is_bot || other.is_bot) {
+        return tribool::False;
+    }
+    Interval meet = operator&(other);
+    if (meet.is_bot) {
+        return tribool::False;
+    }
+    if (this->length() == 0 && other.length() == 0 && this->low == other.low) {
+        return tribool::True;
+    }
+    return tribool::False;
 }

@@ -18,10 +18,6 @@ class ExprHandler {
     static std::map<irep_idt, std::function<Interval(Interval &, Interval &)>>
         arithmetic_ops;
 
-    static Interval get_identifier(exprt);
-    static bool is_identifier(exprt);
-    static Interval get_constant(exprt);
-    static bool is_constant(exprt);
     static Interval get_interval(exprt);
 
   public:
