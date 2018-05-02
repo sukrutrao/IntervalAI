@@ -24,10 +24,10 @@ class Interval {
     Interval(std::pair<INT, INT>);
     Interval(const Interval &);
 
-    Interval operator+(const Interval &);
-    Interval operator-(const Interval &);
-    Interval operator*(const Interval &);
-    Interval operator/(const Interval &);
+    Interval operator+(const Interval &) const;
+    Interval operator-(const Interval &) const;
+    Interval operator*(const Interval &)const;
+    Interval operator/(const Interval &) const;
 
     Interval operator+(INT);
     Interval operator-(INT);

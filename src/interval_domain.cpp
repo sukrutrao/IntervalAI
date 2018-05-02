@@ -11,7 +11,7 @@ using std::min;
 
 Interval::Interval(bool is_bot) {
     this->is_bot = is_bot;
-    std::pair<INT, INT> limits = get_limits();
+    std::pair<INT, INT> limits = top_limits();
     low = limits.first;
     high = limits.second;
     invariant();
@@ -64,7 +64,7 @@ void Interval::invariant() {
         high = limits.second;
 }
 
-Interval Interval::operator+(const Interval &other) {
+Interval Interval::operator+(const Interval &other) const {
     Interval result;
     if (this->is_bot || other.is_bot) {
         result.is_bot = true;
@@ -76,11 +76,11 @@ Interval Interval::operator+(const Interval &other) {
     return result;
 }
 
-Interval Interval::operator-(const Interval &other) {
+Interval Interval::operator-(const Interval &other) const {
     return operator+(operator-(other));
 }
 
-Interval Interval::operator*(const Interval &other) {
+Interval Interval::operator*(const Interval &other) const {
     Interval result;
     if (this->is_bot || other.is_bot) {
         result.is_bot = true;
