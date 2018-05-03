@@ -24,7 +24,7 @@ ExprHandler::ExprHandler() {
     arithmetic_ops.emplace(ID_plus, std::plus<Interval>());
     arithmetic_ops.emplace(ID_minus, std::minus<Interval>());
     arithmetic_ops.emplace(ID_mult, std::multiplies<Interval>());
-    //    arithmetic_ops.emplace(ID_div, std::divides<Interval>()); TODO!!!
+    arithmetic_ops.emplace(ID_div, std::divides<Interval>());
     // relational_ops.emplace(ID_lt, std::less<Interval()>());
     // relational_ops.emplace(ID_gt, std::greater<Interval()>());
     // relational_ops.emplace(ID_le, std::less_equal<Interval()>());

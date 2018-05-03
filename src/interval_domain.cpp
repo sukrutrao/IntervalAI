@@ -306,11 +306,11 @@ tribool intervalai::operator!(tribool first) {
 }
 
 tribool Interval::operator<=(const Interval &other) const {
-    return operator<(other) && operator==(other);
+    return operator<(other) || operator==(other);
 }
 
 tribool Interval::operator>=(const Interval &other) const {
-    return operator>(other) && operator==(other);
+    return operator>(other) || operator==(other);
 }
 
 tribool Interval::operator<(INT other) const {

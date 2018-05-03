@@ -4,12 +4,26 @@
 
 using namespace intervalai;
 
-FuncHandler::FuncHandler(goto_modelt *m) {
+FuncHandler::FuncHandler (goto_modelt *m, RunMode mode) : mode(mode) {
     assert(m != nullptr);
     model = m;
 }
 
 bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
+    while (mode == RunMode::Interactive) {
+        std::string str;
+        std::cout << "cbmc>> ";
+        std::cin >> str;
+        if (str == "n") {
+            break;
+        } else if (str == "p") {
+            for (auto &sym : instruction_handler.expr_handler.symbol_table) {
+                std::cout << sym.first << "\t" << sym.second.to_string() << std::endl;
+            }
+        } else {
+            std::cout << "invalid commnad" << std::endl;
+        }
+    }
     std::cout << (*current).to_string() << std::endl;
     auto instruction = *current;
     if (instruction.is_return()) {
@@ -30,6 +44,7 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
             instruction_handler.expr_handler.symbol_table[param.get_identifier()] = *argument_it;
             argument_it++;
         }
+
     	auto return_val = handleFunc(id2string(std::get<1>(operands)));
     	if (!return_val.first) {
     		return false;
@@ -45,11 +60,22 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
         } else if (guard == intervalai::tribool::False) {
             return handleInstruction(++current);
         } else {
-            bool branch1 = handleInstruction(instruction.targets.front());
-            if (branch1) {
-                return handleInstruction(++current);
+            if (mode == RunMode::Interactive) {
+                std::cout << "Whicg branch?>> ";
+                std::string str;
+                std::cin >> str;
+                if (str == "1") {
+                    return handleInstruction(instruction.targets.front());
+                } else {
+                    return handleInstruction(++current);
+                }
             } else {
-                return false;
+                bool branch1 = handleInstruction(instruction.targets.front());
+                if (branch1) {
+                    return handleInstruction(++current);
+                } else {
+                    return false;
+                }
             }
         }
     }
