@@ -40,10 +40,12 @@ ExprHandler::ExprHandler() {
 
 tribool ExprHandler::handleBooleanExpr(exprt expr) {
     assert(expr.id() == ID_lt || expr.id() == ID_gt || expr.id() == ID_le ||
-           expr.id() == ID_ge || expr.id() == ID_equal || expr.id() == ID_and ||
+           expr.id() == ID_ge || expr.id() == ID_equal ||
+           expr.id() == ID_notequal || expr.id() == ID_and ||
            expr.id() == ID_or || expr.id() == ID_not);
     if (expr.id() == ID_lt || expr.id() == ID_gt || expr.id() == ID_le ||
-        expr.id() == ID_ge || expr.id() == ID_equal) {
+        expr.id() == ID_ge || expr.id() == ID_equal ||
+        expr.id() == ID_notequal) {
         return handleRelationalExpr(expr);
     }
     return handleLogicalExpr(expr);
@@ -51,18 +53,14 @@ tribool ExprHandler::handleBooleanExpr(exprt expr) {
 
 tribool ExprHandler::handleLogicalExpr(exprt expr) {
     assert(expr.id() == ID_and || expr.id() == ID_or || expr.id() == ID_not);
-    assert(expr.operands().size() < 2);
+    assert(expr.operands().size() <= 2);
     tribool op_bool[2], result;
     for (auto i = 0; i < 2; i++) {
         if (expr.operands().size() == i) {
             break;
         }
         auto op = expr.operands()[i];
-        if (op.has_operands()) {
-            op_bool[i] = handleRelationalExpr(expr);
-        } else {
-            op_bool[i] = tribool::True; // TODO!!!
-        }
+        op_bool[i] = handleBooleanExpr(op);
     }
     if (expr.id() == ID_and) {
         result = op_bool[0] && op_bool[1];
@@ -76,7 +74,8 @@ tribool ExprHandler::handleLogicalExpr(exprt expr) {
 
 tribool ExprHandler::handleRelationalExpr(exprt expr) {
     assert(expr.id() == ID_lt || expr.id() == ID_gt || expr.id() == ID_le ||
-           expr.id() == ID_ge || expr.id() == ID_equal);
+           expr.id() == ID_ge || expr.id() == ID_equal ||
+           expr.id() == ID_notequal);
     assert(expr.operands().size() == 2);
     Interval op_bool[2];
     tribool result;
@@ -98,6 +97,8 @@ tribool ExprHandler::handleRelationalExpr(exprt expr) {
         result = op_bool[0] >= op_bool[1];
     } else if (expr.id() == ID_equal) {
         result = op_bool[0] == op_bool[1];
+    } else if (expr.id() == ID_notequal) {
+        result = op_bool[0] != op_bool[1];
     }
     return result;
 }

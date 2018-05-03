@@ -216,7 +216,7 @@ Interval Interval::operator-() const {
     return result;
 }
 
-Interval Interval::operator+(INT other) {
+Interval Interval::operator+(INT other) const {
     Interval result;
     if (this->is_bot) {
         result.is_bot = true;
@@ -228,7 +228,7 @@ Interval Interval::operator+(INT other) {
     return result;
 }
 
-Interval Interval::operator-(INT other) {
+Interval Interval::operator-(INT other) const {
     Interval result;
     if (this->is_bot) {
         result.is_bot = true;
@@ -240,7 +240,7 @@ Interval Interval::operator-(INT other) {
     return result;
 }
 
-Interval Interval::operator*(INT other) {
+Interval Interval::operator*(INT other) const {
     Interval result;
     if (this->is_bot) {
         result.is_bot = true;
@@ -255,7 +255,7 @@ Interval Interval::operator*(INT other) {
     return result;
 }
 
-Interval Interval::operator/(INT other) {
+Interval Interval::operator/(INT other) const {
     Interval result;
     if (this->is_bot) {
         result.is_bot = true;
@@ -363,6 +363,10 @@ tribool Interval::operator==(const Interval &other) const {
     return tribool::False;
 }
 
+tribool Interval::operator!=(const Interval &other) const {
+    return !(operator==(other));
+}
+
 tribool intervalai::operator&&(tribool first, tribool second) {
     if (first == tribool::True && second == tribool::True) {
         return tribool::True;
@@ -401,15 +405,21 @@ tribool Interval::operator>=(const Interval &other) const {
 tribool Interval::operator<(INT other) const {
     return operator<(Interval(other, other));
 }
+
 tribool Interval::operator>(INT other) const {
     return operator>(Interval(other, other));
 }
+
 tribool Interval::operator==(INT other) const {
     return operator==(Interval(other, other));
 }
+
 tribool Interval::operator<=(INT other) const {
     return operator<=(Interval(other, other));
 }
+
 tribool Interval::operator>=(INT other) const {
     return operator>=(Interval(other, other));
 }
+
+tribool Interval::operator!=(INT other) const { return !(operator==(other)); }
