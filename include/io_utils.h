@@ -11,7 +11,6 @@ void displayAbout();
 void displayUnknownMode();
 bool fileExists(std::string);
 void displayUnknownFile(std::string);
-void displaySafe(std::string);
 
 } // namespace intervalai
 

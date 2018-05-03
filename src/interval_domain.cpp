@@ -171,25 +171,26 @@ Interval Interval::operator/(const Interval &other) const {
     } else if (this->low > 0 && other.low <= 0) {
         if (other.high > 0) {
             result.low = this->high / other.low;
-            result.high = this->high / other.high;
-        } else {
+            result.high = pinf();
+        } else if (other.high < 0) {
             result.low = this->high / other.high;
             result.high = this->low / other.low;
+        } else {
+            result.low = this->high / other.low;
+            result.high = pinf();
         }
     } else if (this->low <= 0 && other.low > 0) {
         if (this->high > 0) {
-            result.low = other.high / this->low;
-            result.high = other.high / this->high;
+            result.low = this->low / other.low;
+            result.high = this->high / other.low;
         } else {
-            result.low = other.high / this->high;
-            result.high = other.low / this->low;
+            result.low = this->low / other.low;
+            result.high = this->high / other.high;
         }
     } else {
         if (this->high > 0 && other.high > 0) {
-            result.low =
-                std::min(this->low / other.high, this->high / other.low);
-            result.high =
-                std::max(this->low / other.low, this->high / other.high);
+            result.low = ninf();
+            result.high = pinf();
         } else if (this->high > 0 && other.high <= 0) { // TODO -check
             result.low = other.low * this->high;
             result.high = this->low * other.high;
