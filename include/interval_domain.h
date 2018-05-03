@@ -40,17 +40,19 @@ class Interval {
     tribool operator==(const Interval &) const;
     tribool operator<=(const Interval &) const;
     tribool operator>=(const Interval &) const;
+    tribool operator!=(const Interval &) const;
 
     tribool operator<(INT) const;
     tribool operator>(INT) const;
     tribool operator==(INT) const;
     tribool operator<=(INT) const;
     tribool operator>=(INT) const;
+    tribool operator!=(INT) const;
 
-    Interval operator+(INT);
-    Interval operator-(INT);
-    Interval operator*(INT);
-    Interval operator/(INT);
+    Interval operator+(INT) const;
+    Interval operator-(INT) const;
+    Interval operator*(INT) const;
+    Interval operator/(INT) const;
 
     Interval operator-() const;
     Interval operator&(const Interval &)const;
