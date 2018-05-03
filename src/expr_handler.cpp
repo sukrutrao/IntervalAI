@@ -1,6 +1,7 @@
 #include "expr_handler.h"
 
 #include <cassert>
+#include <iostream>
 #include <util/std_expr.h>
 
 using namespace intervalai;

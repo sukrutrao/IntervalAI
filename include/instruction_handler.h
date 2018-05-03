@@ -17,11 +17,11 @@ class InstructionHandler {
 
   public:
     InstructionHandler();
-    void handleInstruction(instructiont);
+    bool handleInstruction(instructiont);
 
-    // void handleGoto(instructiont);
+    tribool handleGoto(instructiont);
     void handleAssume(instructiont);
-    void handleAssert(instructiont);
+    tribool handleAssert(instructiont);
     void handleOther(instructiont);
     void handleSkip(instructiont);
     void handleReturn(instructiont);

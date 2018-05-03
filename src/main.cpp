@@ -1,4 +1,5 @@
 #include "expr_handler.h"
+#include "func_handler.h"
 #include "instruction_handler.h"
 #include "interval_domain.h"
 #include <goto-programs/goto_model.h>
@@ -59,6 +60,9 @@ int main(int argc, char **argv) {
     // for (auto &i : instructions) {
     //     std::cout << i.type << std::endl;
     // }
+
+    intervalai::FuncHandler func_handler(&model);
+    func_handler.handleFunc("main");
 
     // for (auto s : symbols) {
     //     symbolt sym = s.second;
