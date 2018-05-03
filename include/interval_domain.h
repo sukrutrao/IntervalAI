@@ -2,6 +2,7 @@
 #define INTERVAL_DOMAIN_H
 
 #include <cstdint>
+#include <string>
 #include <utility>
 
 namespace intervalai {
@@ -27,6 +28,7 @@ class Interval {
     Interval(const Interval &);
 
     void view();
+    std::string to_string();
 
     Interval operator+(const Interval &) const;
     Interval operator-(const Interval &) const;
@@ -38,6 +40,12 @@ class Interval {
     tribool operator==(const Interval &) const;
     tribool operator<=(const Interval &) const;
     tribool operator>=(const Interval &) const;
+
+    tribool operator<(INT) const;
+    tribool operator>(INT) const;
+    tribool operator==(INT) const;
+    tribool operator<=(INT) const;
+    tribool operator>=(INT) const;
 
     Interval operator+(INT);
     Interval operator-(INT);
@@ -58,6 +66,8 @@ class Interval {
     bool isBot();
     std::pair<INT, INT> getInterval();
 };
+
+tribool operator&&(tribool first, tribool second);
 
 } // namespace intervalai
 

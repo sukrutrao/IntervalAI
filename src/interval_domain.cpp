@@ -38,29 +38,33 @@ Interval::Interval(const Interval &other) {
     this->high = other.high;
 }
 
-void Interval::view() {
+void Interval::view() { std::cout << to_string(); }
+
+std::string Interval::to_string() {
+    std::string result;
     if (is_bot) {
-        std::cout << "Bot";
-        return;
+        result = "Bot";
+        return result;
     }
-    std::cout << "[";
+    result += "[";
     auto limits = top_limits();
     if (low == limits.first) {
-        std::cout << "-infty";
+        result += "-infty";
     } else if (low == limits.second) {
-        std::cout << "infty";
+        result += "infty";
     } else {
-        std::cout << low;
+        result += low;
     }
-    std::cout << ", ";
+    result += ", ";
     if (high == limits.first) {
-        std::cout << "-infty";
+        result += "-infty";
     } else if (high == limits.second) {
-        std::cout << "infty";
+        result += "infty";
     } else {
-        std::cout << high;
+        result += high;
     }
-    std::cout << "]";
+    result += "]";
+    return result;
 }
 
 inline INT Interval::max_value() {
@@ -320,6 +324,37 @@ tribool Interval::operator==(const Interval &other) const {
         return tribool::False;
     }
     if (this->length() == 0 && other.length() == 0 && this->low == other.low) {
+        return tribool::True;
+    }
+    return tribool::False;
+}
+
+tribool Interval::operator<=(const Interval &other) const {
+    return operator<(other) && operator==(other);
+}
+
+tribool Interval::operator>=(const Interval &other) const {
+    return operator>(other) && operator==(other);
+}
+
+tribool Interval::operator<(INT other) const {
+    return operator<(Interval(other, other));
+}
+tribool Interval::operator>(INT other) const {
+    return operator>(Interval(other, other));
+}
+tribool Interval::operator==(INT other) const {
+    return operator==(Interval(other, other));
+}
+tribool Interval::operator<=(INT other) const {
+    return operator<=(Interval(other, other));
+}
+tribool Interval::operator>=(INT other) const {
+    return operator>=(Interval(other, other));
+}
+
+tribool operator&&(tribool first, tribool second) {
+    if (first == tribool::True && second == tribool::True) {
         return tribool::True;
     }
     return tribool::False;
