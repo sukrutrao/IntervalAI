@@ -25,7 +25,6 @@ class FuncHandler {
     bool handleInstruction(std::_List_iterator<instructiont> current);
 };
 
-
 }; // namespace intervalai
 
 #endif

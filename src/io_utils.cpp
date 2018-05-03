@@ -5,7 +5,7 @@ using namespace intervalai;
 
 void intervalai::displayUnknownMode() {
     std::cout << "Unrecognized Abstract Interpreter mode" << std::endl;
-    std::cout << "Available modes : interactive, step" << std::endl;
+    std::cout << "Available modes : interactive, automated" << std::endl;
 }
 
 void intervalai::displayHelp(std::string name) {
