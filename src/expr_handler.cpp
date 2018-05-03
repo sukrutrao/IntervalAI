@@ -44,9 +44,9 @@ Interval ExprHandler::handleArithmeticExpr(exprt expr) {
 
 Interval ExprHandler::get_interval(exprt expr) {
     auto expr_map = expr.get_named_sub();
-    if (expr_map.find("identifier") == expr_map.end()) {
+    if (expr_map.find("identifier") != expr_map.end()) {
         return symbol_table.at(expr_map["identifier"].id());
-    } else if (expr_map.find("value") == expr_map.end()) {
+    } else if (expr_map.find("value") != expr_map.end()) {
         INT constant_value =
             std::stoi(expr_map["value"].id_string(), nullptr, 2);
         return Interval(constant_value, constant_value);

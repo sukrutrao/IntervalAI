@@ -13,7 +13,6 @@ namespace intervalai {
 class ExprHandler {
 
   private:
-    static std::map<irep_idt, Interval> symbol_table;
     static std::map<irep_idt, std::function<Interval(exprt)>> function_map;
     static std::map<irep_idt, std::function<Interval(Interval &, Interval &)>>
         arithmetic_ops;
@@ -22,9 +21,8 @@ class ExprHandler {
 
   public:
     ExprHandler();
-
+    static std::map<irep_idt, Interval> symbol_table;
     static Interval handleExpr(exprt);
-
     static Interval handleArithmeticExpr(exprt);
 };
 
