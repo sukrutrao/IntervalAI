@@ -13,6 +13,7 @@ namespace intervalai {
 		std::pair<bool, Interval> handleFunc(std::string func_name);
 	private:
 		goto_modelt *model;
+		Interval func_return;
 		InstructionHandler instruction_handler;
 		bool handleInstruction(std::_List_iterator<instructiont> current);
 	};
