@@ -46,7 +46,7 @@ class Interval {
 
     Interval operator-() const;
     Interval operator&(const Interval &)const;
-    Interval operator|(const Interval &) const;7
+    Interval operator|(const Interval &) const;
 
     static inline std::pair<INT, INT> get_limits();
     static inline INT max_value();

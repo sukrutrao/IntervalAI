@@ -63,20 +63,20 @@ void Interval::view() {
     std::cout << "]";
 }
 
-inline std::pair<INT, INT> Interval::get_limits() {
-    return std::make_pair(min_value(), max_value());
-}
-
-inline std::pair<INT, INT> Interval::top_limits() {
-    return std::make_pair(min_value() - 1, max_value() + 1);
-}
-
 inline INT Interval::max_value() {
     return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::max());
 }
 
 inline INT Interval::min_value() {
     return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::min());
+}
+
+inline std::pair<INT, INT> Interval::get_limits() {
+    return std::make_pair(min_value(), max_value());
+}
+
+inline std::pair<INT, INT> Interval::top_limits() {
+    return std::make_pair(min_value() - 1, max_value() + 1);
 }
 
 void Interval::invariant() {

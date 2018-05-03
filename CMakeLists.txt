@@ -4,6 +4,7 @@ project(IntervalAI)
 
 set(IntervalAI_VERSION_MAJOR 0)
 set(IntervalAI_VERSION_MINOR 0)
+set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(include)
 include_directories(cbmc/src)

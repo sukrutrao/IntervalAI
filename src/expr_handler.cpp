@@ -42,11 +42,20 @@ Interval ExprHandler::handleArithmeticExpr(exprt expr) {
     return result;
 }
 
+#include <iostream>
+
 Interval ExprHandler::get_interval(exprt expr) {
+    for (auto &s: symbol_table) {
+        std::cout << s.first << " ";
+        s.second.view();
+        std::cout << std::endl;
+    }
     auto expr_map = expr.get_named_sub();
-    if (expr_map.find("identifier") == expr_map.end()) {
-        return symbol_table.at(expr_map["identifier"].id());
-    } else if (expr_map.find("value") == expr_map.end()) {
+    if (expr_map.find("identifier") != expr_map.end()) {
+        std::cout << expr_map["identifier"].id() << std::endl;
+        return symbol_table[expr_map["identifier"].id_string()];
+    } else if (expr_map.find("value") != expr_map.end()) {
+        std::cout << expr_map["value"].id_string() << std::endl;
         INT constant_value =
             std::stoi(expr_map["value"].id_string(), nullptr, 2);
         return Interval(constant_value, constant_value);

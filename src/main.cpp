@@ -29,34 +29,28 @@ int main(int argc, char **argv) {
     }
 
     auto instructions = model.goto_functions.function_map["main"].body.instructions;
-
     intervalai::ExprHandler expr_handler;
-
-    auto symbols = model.symbol_table.symbols;
-
-    for (auto &sym : symbols) {
-    	expr_handler.symbol_table[sym.first] = intervalai::Interval();
-    }
-
     auto current = instructions.begin();
 
-    std::cout << "Here" << std::endl;
-
     while (current != instructions.end()) {
+    	std::cout << (*current).to_string() << std::endl;
     	if ((*current).is_end_function()) {
     		break;
     	} else if ((*current).is_assign()) {
     		auto assign = static_cast<code_assignt&>((*current).code);
     		auto interval = expr_handler.handleExpr(assign.rhs());
-    		std::cout << assign.lhs().get_named_sub()["identifier"].id() << std::endl;
+    		expr_handler.symbol_table[assign.lhs().get_named_sub()["identifier"].id()] = interval;
     	} else if ((*current).is_dead()) {
-    		// Remove from symbol table
+    		auto dead = static_cast<code_deadt&>((*current).code);
+    		expr_handler.symbol_table.erase(dead.symbol().id());
     	} else if ((*current).is_decl()) {
-    		// Add to symbol table
-    	}
-
-    	std::cout << (*current).code.get_statement() << std::endl;
-    	if ((*current).is_goto()) {
+    		auto decl = static_cast<code_declt&>((*current).code);
+    		expr_handler.symbol_table[decl.symbol().id()] = intervalai::Interval();
+    	} else if ((*current).is_assume()) {
+    		// TODO
+    	} else if ((*current).is_skip()) {
+    		// Do nothing??
+    	} else if ((*current).is_goto()) {
     		std::cout << "GOTO";
     		std::cout << (*current).targets.size();
     		std::cout << (*(*current).targets.front()).type << std::endl;
@@ -67,7 +61,21 @@ int main(int argc, char **argv) {
     		// std::cout << goto_code.get_destination() << std::endl;
     		current = (*(current)).targets.front();
     		continue;
-    	}
+    	} else if ((*current).is_return()) {
+    		// 
+    	} else if ((*current).is_function_call()) {
+    		//
+    	} else if ((*current).is_target()) {
+
+    	} else if ((*current).is_other()) {
+
+    	} else if ((*current).is_assert()) {
+    		auto assert = (*current).guard;
+    		
+    		std::cout << assert.pretty() << std::endl;
+    	} else {
+    		std::cout << "HANDLE THIS" << std::endl;
+    	}    	
     	current++;
     }
 
