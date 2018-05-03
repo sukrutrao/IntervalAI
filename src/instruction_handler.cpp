@@ -16,8 +16,6 @@ bool InstructionHandler::handleInstruction(instructiont instruction) {
         handleAssume(instruction);
     } else if (instruction.is_skip()) {
         handleSkip(instruction);
-    } else if (instruction.is_return()) {
-        handleReturn(instruction);
     } else if (instruction.is_function_call()) {
         handleFunctionCall(instruction);
     } else if (instruction.is_other()) {
@@ -36,7 +34,10 @@ bool InstructionHandler::handleInstruction(instructiont instruction) {
 }
 
 tribool InstructionHandler::handleGoto(instructiont instruction) {
-    // std::cout << instruction.guard.pretty() << std::endl;
+    std::cout << instruction.guard.pretty() << std::endl;
+    if (instruction.guard.is_true()) {
+        return tribool::True;
+    }
     return expr_handler.handleBooleanExpr(instruction.guard);
 }
 
@@ -63,7 +64,10 @@ void InstructionHandler::handleAssign(instructiont instruction) {
 
 Interval InstructionHandler::handleReturn(instructiont instruction) {
     auto return_i = static_cast<code_returnt &>(instruction.code);
-    return expr_handler.handleArithmeticExpr(return_i.return_value());
+    // std::cout << return_i.return_value().pretty() << std::endl;
+    auto ret = expr_handler.handleArithmeticExpr(return_i.return_value());
+    // std::cout << "RET" << ret.to_string() << std::endl;
+    return ret;
 }
 
 void InstructionHandler::handleAssume(instructiont instruction) {}

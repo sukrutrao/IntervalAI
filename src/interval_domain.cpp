@@ -38,9 +38,9 @@ Interval::Interval(const Interval &other) {
     this->high = other.high;
 }
 
-void Interval::view() { std::cout << to_string(); }
+void Interval::view() const { std::cout << to_string(); }
 
-std::string Interval::to_string() {
+std::string Interval::to_string() const {
     std::string result;
     if (is_bot) {
         result = "Bot";
@@ -111,6 +111,7 @@ Interval Interval::operator+(const Interval &other) const {
     result.low = this->low + other.low;
     result.high = this->high + other.high;
     result.invariant();
+    // this->view(); other.view(); result.view();
     return result;
 }
 
