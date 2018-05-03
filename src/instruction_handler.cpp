@@ -5,7 +5,7 @@ using namespace intervalai;
 
 InstructionHandler::InstructionHandler() {}
 
-void InstructionHandler::handleInstruction(instructiont instruction) {
+bool InstructionHandler::handleInstruction(instructiont instruction) {
     if (instruction.is_assign()) {
         handleAssign(instruction);
     } else if (instruction.is_dead()) {
@@ -23,12 +23,21 @@ void InstructionHandler::handleInstruction(instructiont instruction) {
     } else if (instruction.is_other()) {
         handleOther(instruction);
     } else if (instruction.is_assert()) {
-        handleAssert(instruction);
+        auto assert_val = handleAssert(instruction);
+        if (assert_val != intervalai::tribool::True) {
+            return false;
+        }
     } else if (instruction.is_assume()) {
         handleAssume(instruction);
     } else {
         std::cout << "HANDLE THIS" << std::endl;
     }
+    return true;
+}
+
+tribool InstructionHandler::handleGoto(instructiont instruction) {
+    std::cout << instruction.guard.pretty() << std::endl;
+    return expr_handler.handleBooleanExpr(instruction.guard);
 }
 
 void InstructionHandler::handleDecl(instructiont instruction) {
@@ -56,14 +65,15 @@ void InstructionHandler::handleReturn(instructiont instruction) {}
 
 void InstructionHandler::handleAssume(instructiont instruction) {}
 
-void InstructionHandler::handleAssert(instructiont instruction) {
+tribool InstructionHandler::handleAssert(instructiont instruction) {
     auto assert = instruction.guard;
+    // std::cout << assert.pretty() << std::endl;
     auto guard_val = expr_handler.handleBooleanExpr(assert);
     if (guard_val != tribool::True) {
         std::cout << "BUG" << std::endl;
     }
+    return guard_val;
     // std::cout << assert.operands().size() << std::endl;
-    // std::cout << assert.pretty() << std::endl;
 }
 
 void InstructionHandler::handleSkip(instructiont instruction) {}

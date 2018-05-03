@@ -7,6 +7,7 @@
 #include <string>
 #include <util/cout_message.h>
 #include <util/std_code.h>
+#include "func_handler.h"
 
 #include "expr_handler.h"
 
@@ -29,35 +30,8 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    auto instructions = model.goto_functions.function_map["main"].body.instructions;
-    intervalai::InstructionHandler instruction_handler;
-    auto current = instructions.begin();
-
-    while (current != instructions.end()) {
-    	std::cout << (*current).to_string() << std::endl;
-        auto instruction = *current;
-        if (instruction.is_end_function()) {
-            break;
-        }
-        if (instruction.is_goto()) {
-            std::cout << "GOTO";
-            std::cout << instruction.targets.size();
-            std::cout << (*instruction.targets.front()).type << std::endl;
-            // auto inst = static_cast<goto_exprt>(instruction);
-            // auto code = instruction.code;
-            // std::cout << code.get_statement() << std::endl;
-            // auto goto_code = to_code_goto(code);
-            // std::cout << goto_code.get_destination() << std::endl;
-            current = instruction.targets.front();
-            continue;
-        }
-        instruction_handler.handleInstruction(*current);
-    	current++;
-    }
-
-    for (auto &i: instructions) {
-    	std::cout << i.type << std::endl;
-    }
+    intervalai::FuncHandler func_handler(&model);
+    func_handler.handleFunc("main");
 
     // for (auto s : symbols) {
     //     symbolt sym = s.second;

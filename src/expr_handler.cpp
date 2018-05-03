@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <util/std_expr.h>
+#include <iostream>
 
 using namespace intervalai;
 
@@ -51,7 +52,7 @@ tribool ExprHandler::handleBooleanExpr(exprt expr) {
 
 tribool ExprHandler::handleLogicalExpr(exprt expr) {
     assert(expr.id() == ID_and || expr.id() == ID_or || expr.id() == ID_not);
-    assert(expr.operands().size() < 2);
+    assert(expr.operands().size() <= 2);
     tribool op_bool[2], result;
     for (auto i = 0; i < 2; i++) {
         if (expr.operands().size() == i) {
@@ -59,7 +60,7 @@ tribool ExprHandler::handleLogicalExpr(exprt expr) {
         }
         auto op = expr.operands()[i];
         if (op.has_operands()) {
-            op_bool[i] = handleRelationalExpr(expr);
+            op_bool[i] = handleBooleanExpr(op);
         } else {
             op_bool[i] = tribool::True; // TODO!!!
         }
