@@ -76,11 +76,11 @@ inline std::pair<INT, INT> Interval::top_limits() {
 }
 
 inline INT Interval::max_value() {
-    return std::numeric_limits<DOMAIN_INT>::max();
+    return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::max());
 }
 
 inline INT Interval::min_value() {
-    return std::numeric_limits<DOMAIN_INT>::min();
+    return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::min());
 }
 
 void Interval::invariant() {
