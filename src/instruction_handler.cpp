@@ -36,7 +36,6 @@ void InstructionHandler::handleInstruction(instructiont instruction) {
 void InstructionHandler::handleDecl(instructiont instruction) {
 	auto decl = static_cast<code_declt&>(instruction.code);
 	expr_handler.symbol_table[decl.symbol().get_named_sub()["identifier"].id()] = intervalai::Interval();
-	// std::cout << decl.symbol().get_named_sub()["identifier"].id() << std::endl;
 }
 
 void InstructionHandler::handleDead(instructiont instruction) {
@@ -47,7 +46,7 @@ void InstructionHandler::handleDead(instructiont instruction) {
 void InstructionHandler::handleAssign(instructiont instruction) {
 	auto assign = static_cast<code_assignt&>(instruction.code);
 	auto interval = expr_handler.handleExpr(assign.rhs());
-	std::cout << "RHS parsed" << std::endl;
+	// std::cout << "RHS parsed" << std::endl;
 	expr_handler.symbol_table[assign.lhs().get_named_sub()["identifier"].id()] = interval;
 }
 
@@ -60,7 +59,12 @@ void InstructionHandler::handleAssume(instructiont instruction) {
 }
 
 void InstructionHandler::handleAssert(instructiont instruction) {
-	auto assert = instruction.guard;	
+	auto assert = instruction.guard;
+	auto guard_val = expr_handler.handleGuard(assert);
+	if (guard_val != tribool::True) {
+		std::cout << "BUG" << std::endl;
+	}
+	// std::cout << assert.operands().size() << std::endl;
 	// std::cout << assert.pretty() << std::endl;
 }
 
@@ -73,5 +77,5 @@ void InstructionHandler::handleFunctionCall(instructiont instruction) {
 }
 
 void InstructionHandler::handleOther(instructiont instruction) {
-	
+
 }

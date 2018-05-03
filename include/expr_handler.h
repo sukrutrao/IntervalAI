@@ -23,6 +23,7 @@ class ExprHandler {
     ExprHandler();
     static std::map<irep_idt, Interval> symbol_table;
     static Interval handleExpr(exprt);
+    static tribool handleGuard(exprt);
     static Interval handleArithmeticExpr(exprt);
 };
 

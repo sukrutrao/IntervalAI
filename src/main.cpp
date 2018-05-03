@@ -12,12 +12,12 @@
 
 int main(int argc, char **argv) {
 
-    intervalai::Interval a(intervalai::Interval::min_value(), -1),
-        b(-10, intervalai::Interval::max_value());
-    a.view();
-    b.view();
-    auto c = a * b;
-    c.view();
+    // intervalai::Interval a(intervalai::Interval::min_value(), -1),
+    //     b(-10, intervalai::Interval::max_value());
+    // a.view();
+    // b.view();
+    // auto c = a * b;
+    // c.view();
 
     goto_modelt model;
     cout_message_handlert message_handler;
