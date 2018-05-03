@@ -34,7 +34,7 @@ bool InstructionHandler::handleInstruction(instructiont instruction) {
 }
 
 tribool InstructionHandler::handleGoto(instructiont instruction) {
-    std::cout << instruction.guard.pretty() << std::endl;
+    // std::cout << instruction.guard.pretty() << std::endl;
     if (instruction.guard.is_true()) {
         return tribool::True;
     }
