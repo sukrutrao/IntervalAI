@@ -13,8 +13,9 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
     std::cout << (*current).to_string() << std::endl;
     auto instruction = *current;
     if (instruction.is_return()) {
-    	Interval interval = instruction_handler.handleInstruction(instruction);
+    	Interval interval = instruction_handler.handleReturn(instruction);
         func_return = interval;
+        std::cout << func_return.to_string() << std::endl;
     	return true;
     }
     if (instruction.is_end_function()) {
@@ -63,6 +64,10 @@ std::pair<bool, Interval> FuncHandler::handleFunc(std::string func_name) {
     auto instructions =
         model->goto_functions.function_map[func_name].body.instructions;
     intervalai::InstructionHandler instruction_handler;
+    auto params = model->goto_functions.function_map[func_name].type.parameters();
+    for (auto &param : params) {
+        std::cout << instruction_handler.expr_handler.symbol_table[param.get_identifier()].to_string() << std::endl;
+    }
     bool is_safe = handleInstruction(instructions.begin());
     return std::make_pair(is_safe, func_return);
 }

@@ -105,6 +105,7 @@ tribool ExprHandler::handleRelationalExpr(exprt expr) {
 }
 
 Interval ExprHandler::handleArithmeticExpr(exprt expr) {
+    // std::cout << expr.pretty() << std::endl;
     if (!expr.has_operands()) {
         return get_interval(expr);
     }

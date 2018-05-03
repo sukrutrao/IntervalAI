@@ -27,8 +27,8 @@ class Interval {
     Interval(std::pair<INT, INT>);
     Interval(const Interval &);
 
-    void view();
-    std::string to_string();
+    void view() const;
+    std::string to_string() const;
 
     Interval operator+(const Interval &) const;
     Interval operator-(const Interval &) const;
