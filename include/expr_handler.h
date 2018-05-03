@@ -19,7 +19,7 @@ class ExprHandler {
 
     static Interval get_interval(exprt);
 
-    // public:
+  public:
     ExprHandler();
     static std::map<irep_idt, Interval> symbol_table;
     static Interval handleExpr(exprt);

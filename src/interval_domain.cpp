@@ -53,7 +53,7 @@ std::string Interval::to_string() {
     } else if (low == limits.second) {
         result += "infty";
     } else {
-        result += low;
+        result += std::to_string(low);
     }
     result += ", ";
     if (high == limits.first) {
@@ -61,7 +61,7 @@ std::string Interval::to_string() {
     } else if (high == limits.second) {
         result += "infty";
     } else {
-        result += high;
+        result += std::to_string(high);
     }
     result += "]";
     return result;
@@ -161,14 +161,48 @@ Interval Interval::operator*(const Interval &other) const {
     return result;
 }
 
-// Interval Interval::operator/(const Interval &other) {
-//     Interval result;
-//     if (this->is_bot || other.is_bot) {
-//         result.is_bot = true;
-//     } else if() {
-//         result.low = this->low /
-//     }
-// }
+Interval Interval::operator/(const Interval &other) const {
+    Interval result;
+    if (this->is_bot || other.is_bot) {
+        result.is_bot = true;
+    } else if (this->low > 0 && other.low > 0) {
+        result.low = this->low / other.high;
+        result.high = this->high / other.low;
+    } else if (this->low > 0 && other.low <= 0) {
+        if (other.high > 0) {
+            result.low = this->high / other.low;
+            result.high = this->high / other.high;
+        } else {
+            result.low = this->high / other.high;
+            result.high = this->low / other.low;
+        }
+    } else if (this->low <= 0 && other.low > 0) {
+        if (this->high > 0) {
+            result.low = other.high / this->low;
+            result.high = other.high / this->high;
+        } else {
+            result.low = other.high / this->high;
+            result.high = other.low / this->low;
+        }
+    } else {
+        // if (this->high > 0 && other.high > 0) {
+        //     result.low =
+        //         std::min(this->low * other.high, this->high * other.low);
+        //     result.high = this->high * other.high;
+        // } else if (this->high > 0 && other.high <= 0) { // TODO -check
+        //     result.low = other.low * this->high;
+        //     result.high = this->low * other.high;
+        // } else if (this->high <= 0 && other.high > 0) {
+        //     result.low = this->low * other.high;
+        //     result.high = other.low * this->low;
+        // } else {
+        //     result.low = this->high * other.high;
+        //     result.high = this->low * other.low;
+        // }
+    }
+    result.invariant();
+    return result;
+}
 
 Interval Interval::operator-() const {
     Interval result;
@@ -353,7 +387,7 @@ tribool Interval::operator>=(INT other) const {
     return operator>=(Interval(other, other));
 }
 
-tribool operator&&(tribool first, tribool second) {
+tribool intervalai::operator&&(tribool first, tribool second) {
     if (first == tribool::True && second == tribool::True) {
         return tribool::True;
     }
