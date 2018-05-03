@@ -25,6 +25,10 @@ Interval ExprHandler::handleExpr(exprt expr) {
     return function_map.at(expr.id())(expr);
 }
 
+tribool ExprHandler::handleGuard(exprt expr) {
+    
+}
+
 Interval ExprHandler::handleArithmeticExpr(exprt expr) {
     assert(expr.id() == ID_plus || expr.id() == ID_minus ||
            expr.id() == ID_mult || expr.id() == ID_div);
@@ -42,9 +46,20 @@ Interval ExprHandler::handleArithmeticExpr(exprt expr) {
     return result;
 }
 
+#include <iostream>
+
 Interval ExprHandler::get_interval(exprt expr) {
+    // for (auto &s: symbol_table) {
+    //     std::cout << s.first << " ";
+    //     s.second.view();
+    //     std::cout << std::endl;
+    // }
     auto expr_map = expr.get_named_sub();
+    // for (auto &e: expr_map) {
+    //     std::cout << e.first << " " << e.second.id() << std::endl;
+    // }
     if (expr_map.find("identifier") != expr_map.end()) {
+
         return symbol_table.at(expr_map["identifier"].id());
     } else if (expr_map.find("value") != expr_map.end()) {
         INT constant_value =

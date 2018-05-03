@@ -67,20 +67,20 @@ std::string Interval::to_string() {
     return result;
 }
 
-inline std::pair<INT, INT> Interval::get_limits() {
-    return std::make_pair(min_value(), max_value());
-}
-
-inline std::pair<INT, INT> Interval::top_limits() {
-    return std::make_pair(min_value() - 1, max_value() + 1);
-}
-
 inline INT Interval::max_value() {
     return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::max());
 }
 
 inline INT Interval::min_value() {
     return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::min());
+}
+
+inline std::pair<INT, INT> Interval::get_limits() {
+    return std::make_pair(min_value(), max_value());
+}
+
+inline std::pair<INT, INT> Interval::top_limits() {
+    return std::make_pair(min_value() - 1, max_value() + 1);
 }
 
 void Interval::invariant() {
@@ -363,6 +363,13 @@ tribool Interval::operator==(const Interval &other) const {
     return tribool::False;
 }
 
+tribool intervalai::operator&&(tribool first, tribool second) {
+    if (first == tribool::True && second == tribool::True) {
+        return tribool::True;
+    }
+    return tribool::False;
+}
+
 tribool Interval::operator<=(const Interval &other) const {
     return operator<(other) && operator==(other);
 }
@@ -385,11 +392,4 @@ tribool Interval::operator<=(INT other) const {
 }
 tribool Interval::operator>=(INT other) const {
     return operator>=(Interval(other, other));
-}
-
-tribool intervalai::operator&&(tribool first, tribool second) {
-    if (first == tribool::True && second == tribool::True) {
-        return tribool::True;
-    }
-    return tribool::False;
 }

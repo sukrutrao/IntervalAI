@@ -3,7 +3,10 @@
 
 #include "expr_handler.h"
 #include "interval_domain.h"
-#include <goto_program.h>
+#include <goto-programs/goto_program_template.h>
+#include <util/std_code.h>
+
+typedef goto_program_templatet<codet, exprt>::instructiont instructiont;
 
 namespace intervalai {
 
@@ -16,10 +19,16 @@ class InstructionHandler {
     InstructionHandler();
     void handleInstruction(instructiont);
 
-    void handleAssign(insturctiont);
-    void handleDead(insturctiont);
-    void handleDecl(insturctiont);
-    void handleGoto(insturctiont);
+    // void handleGoto(instructiont);
+    void handleAssume(instructiont);
+    void handleAssert(instructiont);
+    void handleOther(instructiont);
+    void handleSkip(instructiont);
+    void handleReturn(instructiont);
+    void handleAssign(instructiont);
+    void handleDecl(instructiont);
+    void handleDead(instructiont);
+    void handleFunctionCall(instructiont);
 };
 
 }; // namespace intervalai

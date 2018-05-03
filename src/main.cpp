@@ -1,4 +1,5 @@
 #include "expr_handler.h"
+#include "instruction_handler.h"
 #include "interval_domain.h"
 #include <goto-programs/goto_model.h>
 #include <goto-programs/read_goto_binary.h>
@@ -11,12 +12,12 @@
 
 int main(int argc, char **argv) {
 
-    intervalai::Interval a(intervalai::Interval::min_value(), -1),
-        b(-10, intervalai::Interval::max_value());
-    a.view();
-    b.view();
-    auto c = a * b;
-    c.view();
+    // intervalai::Interval a(intervalai::Interval::min_value(), -1),
+    //     b(-10, intervalai::Interval::max_value());
+    // a.view();
+    // b.view();
+    // auto c = a * b;
+    // c.view();
 
     goto_modelt model;
     cout_message_handlert message_handler;
@@ -29,45 +30,28 @@ int main(int argc, char **argv) {
     }
 
     auto instructions = model.goto_functions.function_map["main"].body.instructions;
-
-    intervalai::ExprHandler expr_handler;
-
-    auto symbols = model.symbol_table.symbols;
-
-    for (auto &sym : symbols) {
-    	expr_handler.symbol_table[sym.first] = intervalai::Interval();
-    }
-
+    intervalai::InstructionHandler instruction_handler;
     auto current = instructions.begin();
 
-    std::cout << "Here" << std::endl;
-
     while (current != instructions.end()) {
-    	if ((*current).is_end_function()) {
-    		break;
-    	} else if ((*current).is_assign()) {
-    		auto assign = static_cast<code_assignt&>((*current).code);
-    		auto interval = expr_handler.handleExpr(assign.rhs());
-    		std::cout << assign.lhs().get_named_sub()["identifier"].id() << std::endl;
-    	} else if ((*current).is_dead()) {
-    		// Remove from symbol table
-    	} else if ((*current).is_decl()) {
-    		// Add to symbol table
-    	}
-
-    	std::cout << (*current).code.get_statement() << std::endl;
-    	if ((*current).is_goto()) {
-    		std::cout << "GOTO";
-    		std::cout << (*current).targets.size();
-    		std::cout << (*(*current).targets.front()).type << std::endl;
-    		// auto inst = static_cast<goto_exprt>(*current);
-    		// auto code = (*current).code;
-    		// std::cout << code.get_statement() << std::endl;
-    		// auto goto_code = to_code_goto(code);
-    		// std::cout << goto_code.get_destination() << std::endl;
-    		current = (*(current)).targets.front();
-    		continue;
-    	}
+    	std::cout << (*current).to_string() << std::endl;
+        auto instruction = *current;
+        if (instruction.is_end_function()) {
+            break;
+        }
+        if (instruction.is_goto()) {
+            std::cout << "GOTO";
+            std::cout << instruction.targets.size();
+            std::cout << (*instruction.targets.front()).type << std::endl;
+            // auto inst = static_cast<goto_exprt>(instruction);
+            // auto code = instruction.code;
+            // std::cout << code.get_statement() << std::endl;
+            // auto goto_code = to_code_goto(code);
+            // std::cout << goto_code.get_destination() << std::endl;
+            current = instruction.targets.front();
+            continue;
+        }
+        instruction_handler.handleInstruction(*current);
     	current++;
     }
 
