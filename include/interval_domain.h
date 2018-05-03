@@ -34,7 +34,7 @@ class Interval {
     Interval operator*(INT);
     Interval operator/(INT);
 
-    Interval operator-();
+    Interval operator-() const;
     Interval operator&(const Interval &);
     Interval operator|(const Interval &);
 

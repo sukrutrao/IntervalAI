@@ -46,11 +46,11 @@ inline std::pair<INT, INT> Interval::top_limits() {
 }
 
 inline INT Interval::max_value() {
-    return std::numeric_limits<DOMAIN_INT>::max();
+    return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::max());
 }
 
 inline INT Interval::min_value() {
-    return std::numeric_limits<DOMAIN_INT>::min();
+    return static_cast<INT>(std::numeric_limits<DOMAIN_INT>::min());
 }
 
 void Interval::invariant() {
@@ -77,7 +77,7 @@ Interval Interval::operator+(const Interval &other) const {
 }
 
 Interval Interval::operator-(const Interval &other) const {
-    return operator+(operator-(other));
+    return operator+(-other);
 }
 
 Interval Interval::operator*(const Interval &other) const {
@@ -132,7 +132,7 @@ Interval Interval::operator*(const Interval &other) const {
 //     }
 // }
 
-Interval Interval::operator-() {
+Interval Interval::operator-() const {
     Interval result;
     if (this->is_bot) {
         result.is_bot = true;

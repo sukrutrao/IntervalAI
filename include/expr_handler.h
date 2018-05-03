@@ -12,7 +12,7 @@ namespace intervalai {
 
 class ExprHandler {
 
-  private:
+  public:
     static std::map<irep_idt, Interval> symbol_table;
     static std::map<irep_idt, std::function<Interval(exprt)>> function_map;
     static std::map<irep_idt, std::function<Interval(Interval &, Interval &)>>
@@ -24,7 +24,7 @@ class ExprHandler {
     static bool is_constant(exprt);
     static Interval get_interval(exprt);
 
-  public:
+  // public:
     ExprHandler();
 
     static Interval handleExpr(exprt);
