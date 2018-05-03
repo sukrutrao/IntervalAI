@@ -13,8 +13,8 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
     std::cout << (*current).to_string() << std::endl;
     auto instruction = *current;
     if (instruction.is_return()) {
-    	instruction_handler.handleInstruction(instruction);
-    	// set func_return TODO
+    	Interval interval = instruction_handler.handleInstruction(instruction);
+        func_return = interval;
     	return true;
     }
     if (instruction.is_end_function()) {
@@ -22,11 +22,13 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
     }
     if (instruction.is_function_call()) {
     	auto operands = instruction_handler.handleFunctionCall(instruction);
-    	// TODO pass arguments to functions
-    	auto params = model->goto_functions.function_map[id2string(std::get<1>(operands))].parameter_identifiers;
-    	for (auto &param : params) {
-    		std::cout << param << std::endl;
-    	}
+        auto params = model->goto_functions.function_map[std::get<1>(operands)].type.parameters();
+        auto argument_it = std::get<2>(operands).begin();
+
+        for (auto &param : params) {
+            instruction_handler.expr_handler.symbol_table[param.get_identifier()] = *argument_it;
+            argument_it++;
+        }
     	auto return_val = handleFunc(id2string(std::get<1>(operands)));
     	if (!return_val.first) {
     		return false;
@@ -34,7 +36,6 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
     	if (id2string(std::get<0>(operands)) != "") {
     		instruction_handler.expr_handler.symbol_table[id2string(std::get<0>(operands))] = return_val.second;
     	}
-    	return true;
     }
     if (instruction.is_goto()) {
         intervalai::tribool guard = instruction_handler.handleGoto(*current);
@@ -60,7 +61,7 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
 
 std::pair<bool, Interval> FuncHandler::handleFunc(std::string func_name) {
     auto instructions =
-        model->goto_functions.function_map["main"].body.instructions;
+        model->goto_functions.function_map[func_name].body.instructions;
     intervalai::InstructionHandler instruction_handler;
     bool is_safe = handleInstruction(instructions.begin());
     return std::make_pair(is_safe, func_return);

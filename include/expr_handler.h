@@ -21,10 +21,10 @@ class ExprHandler {
     // static std::map<irep_idt, std::function<tribool(tribool, tribool)>>
     //     logical_ops;
 
-    static Interval get_interval(exprt);
 
   public:
     ExprHandler();
+    static Interval get_interval(exprt);
     static std::map<irep_idt, Interval> symbol_table;
     // static Interval handleExpr(exprt);
     static tribool handleBooleanExpr(exprt);

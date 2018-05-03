@@ -24,7 +24,7 @@ class InstructionHandler {
     tribool handleAssert(instructiont);
     void handleOther(instructiont);
     void handleSkip(instructiont);
-    void handleReturn(instructiont);
+    Interval handleReturn(instructiont);
     void handleAssign(instructiont);
     void handleDecl(instructiont);
     void handleDead(instructiont);

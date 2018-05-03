@@ -61,7 +61,10 @@ void InstructionHandler::handleAssign(instructiont instruction) {
         interval;
 }
 
-void InstructionHandler::handleReturn(instructiont instruction) {}
+Interval InstructionHandler::handleReturn(instructiont instruction) {
+    auto return_i = static_cast<code_returnt &>(instruction.code);
+    return expr_handler.handleArithmeticExpr(return_i.return_value());
+}
 
 void InstructionHandler::handleAssume(instructiont instruction) {}
 
@@ -71,6 +74,8 @@ tribool InstructionHandler::handleAssert(instructiont instruction) {
     auto guard_val = expr_handler.handleBooleanExpr(assert);
     if (guard_val != tribool::True) {
         std::cout << "BUG" << std::endl;
+    } else {
+        std::cout << "ASSERT PASS" << std::endl;
     }
     return guard_val;
     // std::cout << assert.operands().size() << std::endl;
@@ -84,8 +89,12 @@ std::tuple<dstringt, dstringt, std::vector<Interval>> InstructionHandler::handle
     auto func = func_call.function().get_named_sub()["identifier"].id();
     std::vector<Interval> intervals;
     for (auto &op: func_call.arguments()) {
-        auto interval = expr_handler.handleArithmeticExpr(op);
-        intervals.push_back(interval);
+        // std::cout << op.pretty() << std::endl;
+        if (op.has_operands()) {
+            intervals.push_back(expr_handler.handleArithmeticExpr(op));
+        } else {
+            intervals.push_back(expr_handler.get_interval(op));
+        }
     }
     return std::make_tuple(lhs, func, intervals);
 }

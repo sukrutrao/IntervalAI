@@ -15,6 +15,7 @@ class FuncHandler {
 
   private:
     goto_modelt *model;
+    Interval func_return;
     InstructionHandler instruction_handler;
     bool handleInstruction(std::_List_iterator<instructiont> current);
 };

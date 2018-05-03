@@ -11,7 +11,7 @@
 
 #include "expr_handler.h"
 
-int main_(int argc, char **argv) {
+int main(int argc, char **argv) {
 
     // intervalai::Interval a(intervalai::Interval::min_value(), -1),
     //     b(-10, intervalai::Interval::max_value());
@@ -62,6 +62,7 @@ int main_(int argc, char **argv) {
     // }
 
     intervalai::FuncHandler func_handler(&model);
+
     func_handler.handleFunc("main");
 
     // for (auto s : symbols) {
@@ -74,32 +75,32 @@ int main_(int argc, char **argv) {
     //     // std::cout << 100 << s.first << std::endl;
     // }
 
-    for (auto instruction : instructions) {
-        std::cout << "ABC:" << instruction.to_string() << std::endl;
-        if (instruction.is_assert()) {
-            auto assign =
-                instruction
-                    .guard;    // static_cast<code_assignt &>(instruction.code);
-            auto rhs = assign; // assign.rhs();
-            if (rhs.id() == ID_lt) {
-                //	std::cout << to_plus_expr(rhs).op0().pretty() << std::endl;
-                auto p = rhs;
-                std::cout << "RHS ID: " << rhs.id() << std::endl;
-                for (auto op = p.operands().begin(); op != p.operands().end();
-                     op++) {
-                    std::cout << "Op: " << (*op).id() << (*op).has_operands()
-                              << std::endl;
-                    for (auto i = op->get_named_sub().begin();
-                         i != op->get_named_sub().end(); i++) {
-                        std::cout << "First: " << (*i).first << std::endl;
-                        std::cout << "Second: " << (*i).second.id()
-                                  << std::endl;
-                    }
-                    //    std::cout << (*op).get_named_sub(). << std::endl;
-                }
-            }
-        }
-    }
+    // for (auto instruction : instructions) {
+    //     std::cout << "ABC:" << instruction.to_string() << std::endl;
+    //     if (instruction.is_assert()) {
+    //         auto assign =
+    //             instruction
+    //                 .guard;    // static_cast<code_assignt &>(instruction.code);
+    //         auto rhs = assign; // assign.rhs();
+    //         if (rhs.id() == ID_lt) {
+    //             //	std::cout << to_plus_expr(rhs).op0().pretty() << std::endl;
+    //             auto p = rhs;
+    //             std::cout << "RHS ID: " << rhs.id() << std::endl;
+    //             for (auto op = p.operands().begin(); op != p.operands().end();
+    //                  op++) {
+    //                 std::cout << "Op: " << (*op).id() << (*op).has_operands()
+    //                           << std::endl;
+    //                 for (auto i = op->get_named_sub().begin();
+    //                      i != op->get_named_sub().end(); i++) {
+    //                     std::cout << "First: " << (*i).first << std::endl;
+    //                     std::cout << "Second: " << (*i).second.id()
+    //                               << std::endl;
+    //                 }
+    //                 //    std::cout << (*op).get_named_sub(). << std::endl;
+    //             }
+    //         }
+    //     }
+    // }
 
     return 0;
 }
