@@ -4,7 +4,7 @@
 
 using namespace intervalai;
 
-FuncHandler::FuncHandler (goto_modelt *m, RunMode mode) : mode(mode) {
+FuncHandler::FuncHandler (goto_modelt *m, unsigned int widen_limit, RunMode mode) : mode(mode), widen_limit(widen_limit) {
     assert(m != nullptr);
     model = m;
 }
@@ -30,9 +30,11 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
     	Interval interval = instruction_handler.handleReturn(instruction);
         func_return = interval;
         std::cout << func_return.to_string() << std::endl;
+        loop_count.clear();
     	return true;
     }
     if (instruction.is_end_function()) {
+        loop_count.clear();
         return true;
     }
     if (instruction.is_function_call()) {
@@ -54,6 +56,22 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
     	}
     }
     if (instruction.is_goto()) {
+        if (instruction.is_backwards_goto()) {
+            if (loop_count.find(instruction.location_number) == loop_count.end()) {
+                loop_count[instruction.location_number] = 0;
+            }
+            loop_count[instruction.location_number] += 1;
+            if (loop_count[instruction.location_number] >= widen_limit) {
+                auto iter = current;
+                while (iter != instruction.targets.front()) {
+                    if ((*iter).is_assign()) {
+                        auto assign = static_cast<code_assignt&>((*iter).code);
+                        instruction_handler.expr_handler.symbol_table[assign.lhs().get_named_sub()["identifier"].id()] = Interval();
+                    }
+                    iter--;
+                }
+            }
+        }
         intervalai::tribool guard = instruction_handler.handleGoto(*current);
         if (guard == intervalai::tribool::True) {
             return handleInstruction(instruction.targets.front());

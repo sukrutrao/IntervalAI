@@ -42,7 +42,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    intervalai::FuncHandler func_handler(&model, mode);
+    unsigned widen_limit = 100;
+
+    intervalai::FuncHandler func_handler(&model, widen_limit, mode);
 
     func_handler.handleFunc("main");
 
