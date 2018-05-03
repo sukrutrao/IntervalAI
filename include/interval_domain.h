@@ -22,10 +22,11 @@ class Interval {
 
   public:
     Interval(bool is_bot = false);
-    Interval(INT);
     Interval(INT, INT);
     Interval(std::pair<INT, INT>);
     Interval(const Interval &);
+
+    void view();
 
     Interval operator+(const Interval &) const;
     Interval operator-(const Interval &) const;

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <limits>
 
 using namespace intervalai;
@@ -14,13 +15,6 @@ Interval::Interval(bool is_bot) {
     std::pair<INT, INT> limits = top_limits();
     low = limits.first;
     high = limits.second;
-    invariant();
-}
-
-Interval::Interval(INT value) {
-    is_bot = false;
-    low = value;
-    high = value;
     invariant();
 }
 
@@ -42,6 +36,31 @@ Interval::Interval(const Interval &other) {
     this->is_bot = other.is_bot;
     this->low = other.low;
     this->high = other.high;
+}
+
+void Interval::view() {
+    if (is_bot) {
+        std::cout << "Bot";
+        return;
+    }
+    std::cout << "[";
+    auto limits = top_limits();
+    if (low == limits.first) {
+        std::cout << "-infty";
+    } else if (low == limits.second) {
+        std::cout << "infty";
+    } else {
+        std::cout << low;
+    }
+    std::cout << ", ";
+    if (high == limits.first) {
+        std::cout << "-infty";
+    } else if (low == limits.second) {
+        std::cout << "infty";
+    } else {
+        std::cout << high;
+    }
+    std::cout << "]";
 }
 
 inline std::pair<INT, INT> Interval::get_limits() {
@@ -69,6 +88,14 @@ void Interval::invariant() {
         low = limits.first;
     if (high > limits.second)
         high = limits.second;
+    // Check - TODO
+    if (low > limits.second) {
+        low = limits.second;
+    }
+    if (high < limits.first) {
+        high = limits.first;
+    }
+    assert(low <= high);
 }
 
 Interval Interval::operator+(const Interval &other) const {

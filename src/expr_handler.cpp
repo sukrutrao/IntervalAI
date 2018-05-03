@@ -49,7 +49,7 @@ Interval ExprHandler::get_interval(exprt expr) {
     } else if (expr_map.find("value") == expr_map.end()) {
         INT constant_value =
             std::stoi(expr_map["value"].id_string(), nullptr, 2);
-        return Interval(constant_value);
+        return Interval(constant_value, constant_value);
     } else {
         assert(false); // TODO: remove this
     }
