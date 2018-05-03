@@ -61,6 +61,8 @@ class Interval {
     static inline std::pair<INT, INT> get_limits();
     static inline INT max_value();
     static inline INT min_value();
+    static inline INT pinf();
+    static inline INT ninf();
     static inline std::pair<INT, INT> top_limits();
     inline INT length() const;
 

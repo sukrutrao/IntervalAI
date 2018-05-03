@@ -49,17 +49,17 @@ std::string Interval::to_string() {
     result += "[";
     auto limits = top_limits();
     if (low == limits.first) {
-        result += "-infty";
+        result += "-inf";
     } else if (low == limits.second) {
-        result += "infty";
+        result += "inf";
     } else {
         result += std::to_string(low);
     }
     result += ", ";
     if (high == limits.first) {
-        result += "-infty";
+        result += "-inf";
     } else if (high == limits.second) {
-        result += "infty";
+        result += "inf";
     } else {
         result += std::to_string(high);
     }
@@ -80,7 +80,7 @@ inline std::pair<INT, INT> Interval::get_limits() {
 }
 
 inline std::pair<INT, INT> Interval::top_limits() {
-    return std::make_pair(min_value() - 1, max_value() + 1);
+    return std::make_pair(ninf(), pinf());
 }
 
 void Interval::invariant() {
@@ -185,20 +185,21 @@ Interval Interval::operator/(const Interval &other) const {
             result.high = other.low / this->low;
         }
     } else {
-        // if (this->high > 0 && other.high > 0) {
-        //     result.low =
-        //         std::min(this->low * other.high, this->high * other.low);
-        //     result.high = this->high * other.high;
-        // } else if (this->high > 0 && other.high <= 0) { // TODO -check
-        //     result.low = other.low * this->high;
-        //     result.high = this->low * other.high;
-        // } else if (this->high <= 0 && other.high > 0) {
-        //     result.low = this->low * other.high;
-        //     result.high = other.low * this->low;
-        // } else {
-        //     result.low = this->high * other.high;
-        //     result.high = this->low * other.low;
-        // }
+        if (this->high > 0 && other.high > 0) {
+            result.low =
+                std::min(this->low / other.high, this->high / other.low);
+            result.high =
+                std::max(this->low / other.low, this->high / other.high);
+        } else if (this->high > 0 && other.high <= 0) { // TODO -check
+            result.low = other.low * this->high;
+            result.high = this->low * other.high;
+        } else if (this->high <= 0 && other.high > 0) {
+            result.low = this->low * other.high;
+            result.high = other.low * this->low;
+        } else {
+            result.low = this->high * other.high;
+            result.high = this->low * other.low;
+        }
     }
     result.invariant();
     return result;
@@ -423,3 +424,7 @@ tribool Interval::operator>=(INT other) const {
 }
 
 tribool Interval::operator!=(INT other) const { return !(operator==(other)); }
+
+inline INT Interval::pinf() { return max_value() + 1; }
+
+inline INT Interval::ninf() { return min_value() - 1; }
