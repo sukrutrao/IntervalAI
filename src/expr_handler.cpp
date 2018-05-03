@@ -51,7 +51,11 @@ Interval ExprHandler::get_interval(exprt expr) {
         std::cout << std::endl;
     }
     auto expr_map = expr.get_named_sub();
+    for (auto &e: expr_map) {
+        std::cout << e.first << " " << e.second.id() << std::endl;
+    }
     if (expr_map.find("identifier") != expr_map.end()) {
+
         return symbol_table.at(expr_map["identifier"].id());
     } else if (expr_map.find("value") != expr_map.end()) {
         INT constant_value =

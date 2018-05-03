@@ -329,6 +329,13 @@ tribool Interval::operator==(const Interval &other) const {
     return tribool::False;
 }
 
+tribool intervalai::operator&&(tribool first, tribool second) {
+    if (first == tribool::True && second == tribool::True) {
+        return tribool::True;
+    }
+    return tribool::False;
+}
+
 tribool Interval::operator<=(const Interval &other) const {
     return operator<(other) && operator==(other);
 }
@@ -351,11 +358,4 @@ tribool Interval::operator<=(INT other) const {
 }
 tribool Interval::operator>=(INT other) const {
     return operator>=(Interval(other, other));
-}
-
-tribool operator&&(tribool first, tribool second) {
-    if (first == tribool::True && second == tribool::True) {
-        return tribool::True;
-    }
-    return tribool::False;
 }
