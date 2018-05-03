@@ -18,14 +18,18 @@ bool ArgParser::argExists(std::string check_arg) {
     return false;
 }
 
-std::string ArgParser::getArgValue(std::string get_arg) {
+RunMode ArgParser::getArgValue(std::string get_arg) {
     if (std::find(args.begin(), args.end(), get_arg) == args.end()) {
-        return "";
+        return RunMode::Error;
     }
     auto it = std::find(args.begin(), args.end(), get_arg);
     it++;
     if (it != args.end()) {
-        return *it;
+        if (*it == "step") {
+            return RunMode::Step;
+        } else if (*it == "interactive") {
+            return RunMode::Interactive;
+        }
     }
-    return "";
+    return RunMode::Error;
 }

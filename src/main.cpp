@@ -11,7 +11,7 @@
 
 #include "expr_handler.h"
 
-int main(int argc, char **argv) {
+int main_(int argc, char **argv) {
 
     // intervalai::Interval a(intervalai::Interval::min_value(), -1),
     //     b(-10, intervalai::Interval::max_value());

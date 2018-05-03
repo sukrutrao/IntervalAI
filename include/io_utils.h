@@ -1,5 +1,5 @@
-#ifndef DISPLAY_UTILS_H
-#define DISPLAY_UTILS_H
+#ifndef IO_UTILS_H
+#define IO_UTILS_H
 
 #include <iostream>
 #include <string>
@@ -8,7 +8,9 @@ namespace intervalai {
 
 void displayHelp(std::string);
 void displayAbout();
-void displayUnknownMode(std::string);
+void displayUnknownMode();
+bool fileExists(std::string);
+void displayUnknownFile(std::string);
 
 } // namespace intervalai
 

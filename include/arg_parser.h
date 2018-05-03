@@ -1,6 +1,7 @@
 #ifndef ARG_PARSER_H
 #define ARG_PARSER_H
 
+#include "func_handler.h"
 #include <string>
 #include <vector>
 
@@ -13,7 +14,7 @@ class ArgParser {
   public:
     ArgParser(int, char **);
     bool argExists(std::string);
-    std::string getArgValue(std::string);
+    RunMode getArgValue(std::string);
 };
 
 } // namespace intervalai
