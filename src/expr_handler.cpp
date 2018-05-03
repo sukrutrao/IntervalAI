@@ -108,6 +108,13 @@ Interval ExprHandler::handleArithmeticExpr(exprt expr) {
     if (!expr.has_operands()) {
         return get_interval(expr);
     }
+    if (expr.id() == ID_unary_plus || expr.id() == ID_unary_minus) {
+        assert(expr.operands().size() == 1);
+        if (expr.id() == ID_unary_plus) {
+            return handleArithmeticExpr(expr.operands()[0]);
+        }
+        return -handleArithmeticExpr(expr.operands()[0]);
+    }
     assert(expr.id() == ID_plus || expr.id() == ID_minus ||
            expr.id() == ID_mult || expr.id() == ID_div);
     assert(expr.operands().size() == 2);

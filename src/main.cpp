@@ -11,7 +11,7 @@
 
 #include "expr_handler.h"
 
-int main(int argc, char **argv) {
+int main_(int argc, char **argv) {
 
     // intervalai::Interval a(intervalai::Interval::min_value(), -1),
     //     b(-10, intervalai::Interval::max_value());
@@ -80,13 +80,14 @@ int main(int argc, char **argv) {
     //     if (instruction.is_assert()) {
     //         auto assign =
     //             instruction
-    //                 .guard;    // static_cast<code_assignt &>(instruction.code);
+    //                 .guard;    // static_cast<code_assignt
+    //                 &>(instruction.code);
     //         auto rhs = assign; // assign.rhs();
     //         if (rhs.id() == ID_lt) {
-    //             //	std::cout << to_plus_expr(rhs).op0().pretty() << std::endl;
-    //             auto p = rhs;
-    //             std::cout << "RHS ID: " << rhs.id() << std::endl;
-    //             for (auto op = p.operands().begin(); op != p.operands().end();
+    //             //	std::cout << to_plus_expr(rhs).op0().pretty() <<
+    //             std::endl; auto p = rhs; std::cout << "RHS ID: " << rhs.id()
+    //             << std::endl; for (auto op = p.operands().begin(); op !=
+    //             p.operands().end();
     //                  op++) {
     //                 std::cout << "Op: " << (*op).id() << (*op).has_operands()
     //                           << std::endl;

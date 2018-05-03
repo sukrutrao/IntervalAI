@@ -191,7 +191,7 @@ Interval Interval::operator/(const Interval &other) const {
         if (this->high > 0 && other.high > 0) {
             result.low = ninf();
             result.high = pinf();
-        } else if (this->high > 0 && other.high <= 0) { // TODO -check
+        } else if (this->high > 0 && other.high < 0) { // TODO -check
             result.low = other.low * this->high;
             result.high = this->low * other.high;
         } else if (this->high <= 0 && other.high > 0) {
