@@ -20,7 +20,7 @@ class FuncHandler {
     bool handleInstruction(std::_List_iterator<instructiont> current);
 };
 
-enum class RunMode { Interactive, Step, Error };
+enum class RunMode { Interactive, Automated, Error };
 
 }; // namespace intervalai
 

@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
         intervalai::displayAbout();
         return 0;
     }
-    intervalai::RunMode mode = intervalai::RunMode::Interactive;
+    intervalai::RunMode mode = intervalai::RunMode::Automated;
     if (arg_parser.argExists("-m")) {
         mode = arg_parser.getArgValue("-m");
         if (mode == intervalai::RunMode::Error) {

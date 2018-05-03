@@ -25,8 +25,8 @@ RunMode ArgParser::getArgValue(std::string get_arg) {
     auto it = std::find(args.begin(), args.end(), get_arg);
     it++;
     if (it != args.end()) {
-        if (*it == "step") {
-            return RunMode::Step;
+        if (*it == "automated") {
+            return RunMode::Automated;
         } else if (*it == "interactive") {
             return RunMode::Interactive;
         }
