@@ -123,40 +123,13 @@ Interval Interval::operator*(const Interval &other) const {
     Interval result;
     if (this->is_bot || other.is_bot) {
         result.is_bot = true;
-    } else if (this->low > 0 && other.low > 0) {
-        result.low = this->low * other.low;
-        result.high = this->high * other.high;
-    } else if (this->low > 0 && other.low <= 0) {
-        if (other.high > 0) {
-            result.low = this->high * other.low;
-            result.high = this->high * other.high;
-        } else {
-            result.low = this->high * other.low;
-            result.high = this->low * other.high;
-        }
-    } else if (this->low <= 0 && other.low > 0) {
-        if (this->high > 0) {
-            result.low = this->low * other.high;
-            result.high = this->low * other.low;
-        } else {
-            result.low = this->low * other.high;
-            result.high = this->high * other.low;
-        }
     } else {
-        if (this->high > 0 && other.high > 0) {
-            result.low =
-                std::min(this->low * other.high, this->high * other.low);
-            result.high = this->high * other.high;
-        } else if (this->high > 0 && other.high <= 0) { // TODO -check
-            result.low = other.low * this->high;
-            result.high = this->low * other.high;
-        } else if (this->high <= 0 && other.high > 0) {
-            result.low = this->low * other.high;
-            result.high = other.low * this->low;
-        } else {
-            result.low = this->high * other.high;
-            result.high = this->low * other.low;
-        }
+        result.low =
+            std::min({this->low * other.low, this->low * other.high,
+                      this->high * other.low, this->high * other.high});
+        result.high =
+            std::max({this->low * other.low, this->low * other.high,
+                      this->high * other.low, this->high * other.high});
     }
     result.invariant();
     return result;
@@ -166,42 +139,15 @@ Interval Interval::operator/(const Interval &other) const {
     Interval result;
     if (this->is_bot || other.is_bot) {
         result.is_bot = true;
-    } else if (this->low > 0 && other.low > 0) {
-        result.low = this->low / other.high;
-        result.high = this->high / other.low;
-    } else if (this->low > 0 && other.low <= 0) {
-        if (other.high > 0) {
-            result.low = this->high / other.low;
-            result.high = pinf();
-        } else if (other.high < 0) {
-            result.low = this->high / other.high;
-            result.high = this->low / other.low;
-        } else {
-            result.low = this->high / other.low;
-            result.high = pinf();
-        }
-    } else if (this->low <= 0 && other.low > 0) {
-        if (this->high > 0) {
-            result.low = this->low / other.low;
-            result.high = this->high / other.low;
-        } else {
-            result.low = this->low / other.low;
-            result.high = this->high / other.high;
-        }
+    } else if (!(other.low <= 0 && other.high >= 0)) {
+        result.low =
+            std::min({this->low / other.low, this->low / other.high,
+                      this->high / other.low, this->high / other.high});
+        result.high =
+            std::max({this->low / other.low, this->low / other.high,
+                      this->high / other.low, this->high / other.high});
     } else {
-        if (this->high > 0 && other.high > 0) {
-            result.low = ninf();
-            result.high = pinf();
-        } else if (this->high > 0 && other.high < 0) { // TODO -check
-            result.low = other.low * this->high;
-            result.high = this->low * other.high;
-        } else if (this->high <= 0 && other.high > 0) {
-            result.low = this->low * other.high;
-            result.high = other.low * this->low;
-        } else {
-            result.low = this->high * other.high;
-            result.high = this->low * other.low;
-        }
+        result = Interval();
     }
     result.invariant();
     return result;
@@ -220,57 +166,19 @@ Interval Interval::operator-() const {
 }
 
 Interval Interval::operator+(INT other) const {
-    Interval result;
-    if (this->is_bot) {
-        result.is_bot = true;
-    } else {
-        result.low = this->low + other;
-        result.high = this->high + other;
-    }
-    result.invariant();
-    return result;
+    return operator+(Interval(other, other));
 }
 
 Interval Interval::operator-(INT other) const {
-    Interval result;
-    if (this->is_bot) {
-        result.is_bot = true;
-    } else {
-        result.low = this->low - other;
-        result.high = this->high - other;
-    }
-    result.invariant();
-    return result;
+    return operator-(Interval(other, other));
 }
 
 Interval Interval::operator*(INT other) const {
-    Interval result;
-    if (this->is_bot) {
-        result.is_bot = true;
-    } else if (other > 0) {
-        result.low = this->low * other;
-        result.high = this->high * other;
-    } else {
-        result.low = this->high * other;
-        result.high = this->low * other;
-    }
-    result.invariant();
-    return result;
+    return operator*(Interval(other, other));
 }
 
 Interval Interval::operator/(INT other) const {
-    Interval result;
-    if (this->is_bot) {
-        result.is_bot = true;
-    } else if (other > 0) {
-        result.low = this->low / other;
-        result.high = this->high / other;
-    } else {
-        result.low = this->high / other;
-        result.high = this->low / other;
-    }
-    result.invariant();
-    return result;
+    return operator/(Interval(other, other));
 }
 
 // Meet
