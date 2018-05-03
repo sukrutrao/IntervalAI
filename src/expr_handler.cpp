@@ -6,27 +6,100 @@
 using namespace intervalai;
 
 std::map<irep_idt, Interval> ExprHandler::symbol_table;
-std::map<irep_idt, std::function<Interval(exprt)>> ExprHandler::function_map;
+// std::map<irep_idt, std::function<Interval(exprt)>> ExprHandler::function_map;
 std::map<irep_idt, std::function<Interval(Interval &, Interval &)>>
     ExprHandler::arithmetic_ops;
 
 ExprHandler::ExprHandler() {
-    function_map.emplace(ID_plus, handleArithmeticExpr);
-    function_map.emplace(ID_minus, handleArithmeticExpr);
-    function_map.emplace(ID_mult, handleArithmeticExpr);
-    function_map.emplace(ID_div, handleArithmeticExpr);
+    // function_map.emplace(ID_plus, handleArithmeticExpr);
+    // function_map.emplace(ID_minus, handleArithmeticExpr);
+    // function_map.emplace(ID_mult, handleArithmeticExpr);
+    // function_map.emplace(ID_div, handleArithmeticExpr);
+    // function_map.emplace(ID_lt, handleRelationalExpr);
+    // function_map.emplace(ID_gt, handleRelationalExpr);
+    // function_map.emplace(ID_le, handleRelationalExpr);
+    // function_map.emplace(ID_ge, handleRelationalExpr);
+    // function_map.emplace(ID_equal, handleRelationalExpr);
     arithmetic_ops.emplace(ID_plus, std::plus<Interval>());
     arithmetic_ops.emplace(ID_minus, std::minus<Interval>());
     arithmetic_ops.emplace(ID_mult, std::multiplies<Interval>());
-    //    arithmetic_ops.emplace(ID_div, std::divides<Interval>());
+    //    arithmetic_ops.emplace(ID_div, std::divides<Interval>()); TODO!!!
+    // relational_ops.emplace(ID_lt, std::less<Interval()>());
+    // relational_ops.emplace(ID_gt, std::greater<Interval()>());
+    // relational_ops.emplace(ID_le, std::less_equal<Interval()>());
+    // relational_ops.emplace(ID_ge, std::greater_equal<Interval()>());
+    // relational_ops.emplace(ID_equal, std::equal_to<Interval()>());
+    // logical_ops.emplace(ID_and, std::logical_and<tribool>());
+    // logical_ops.emplace(ID_or, std::logical_or<tribool>());
+    // logical_ops.emplace(ID_not, std::logical_not<tribool>());
 }
 
-Interval ExprHandler::handleExpr(exprt expr) {
-    return function_map.at(expr.id())(expr);
+// Interval ExprHandler::handleExpr(exprt expr) {
+//     return function_map.at(expr.id())(expr);
+// }
+
+tribool ExprHandler::handleBooleanExpr(exprt expr) {
+    assert(expr.id() == ID_lt || expr.id() == ID_gt || expr.id() == ID_le ||
+           expr.id() == ID_ge || expr.id() == ID_equal || expr.id() == ID_and ||
+           expr.id() == ID_or || expr.id() == ID_not);
+    if (expr.id() == ID_lt || expr.id() == ID_gt || expr.id() == ID_le ||
+        expr.id() == ID_ge || expr.id() == ID_equal) {
+        return handleRelationalExpr(expr);
+    }
+    return handleLogicalExpr(expr);
 }
 
-tribool ExprHandler::handleGuard(exprt expr) {
-    
+tribool ExprHandler::handleLogicalExpr(exprt expr) {
+    assert(expr.id() == ID_and || expr.id() == ID_or || expr.id() == ID_not);
+    assert(expr.operands().size() < 2);
+    tribool op_bool[2], result;
+    for (auto i = 0; i < 2; i++) {
+        if (expr.operands().size() == i) {
+            break;
+        }
+        auto op = expr.operands()[i];
+        if (op.has_operands()) {
+            op_bool[i] = handleRelationalExpr(expr);
+        } else {
+            op_bool[i] = tribool::True; // TODO!!!
+        }
+    }
+    if (expr.id() == ID_and) {
+        result = op_bool[0] && op_bool[1];
+    } else if (expr.id() == ID_or) {
+        result = op_bool[0] || op_bool[1];
+    } else if (expr.id() == ID_not) {
+        result = !(op_bool[0]);
+    }
+    return result;
+}
+
+tribool ExprHandler::handleRelationalExpr(exprt expr) {
+    assert(expr.id() == ID_lt || expr.id() == ID_gt || expr.id() == ID_le ||
+           expr.id() == ID_ge || expr.id() == ID_equal);
+    assert(expr.operands().size() == 2);
+    Interval op_bool[2];
+    tribool result;
+    for (auto i = 0; i < 2; i++) {
+        auto op = expr.operands()[i];
+        if (op.has_operands()) {
+            op_bool[i] = handleArithmeticExpr(op);
+        } else {
+            op_bool[i] = get_interval(op);
+        }
+    }
+    if (expr.id() == ID_lt) {
+        result = op_bool[0] < op_bool[1];
+    } else if (expr.id() == ID_gt) {
+        result = op_bool[0] > op_bool[1];
+    } else if (expr.id() == ID_le) {
+        result = op_bool[0] <= op_bool[1];
+    } else if (expr.id() == ID_ge) {
+        result = op_bool[0] >= op_bool[1];
+    } else if (expr.id() == ID_equal) {
+        result = op_bool[0] == op_bool[1];
+    }
+    return result;
 }
 
 Interval ExprHandler::handleArithmeticExpr(exprt expr) {
@@ -37,7 +110,7 @@ Interval ExprHandler::handleArithmeticExpr(exprt expr) {
     for (auto i = 0; i < 2; i++) {
         auto op = expr.operands()[i];
         if (op.has_operands()) {
-            op_intervals[i] = handleExpr(op);
+            op_intervals[i] = handleArithmeticExpr(op);
         } else {
             op_intervals[i] = get_interval(op);
         }

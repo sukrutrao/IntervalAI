@@ -68,6 +68,8 @@ class Interval {
 };
 
 tribool operator&&(tribool first, tribool second);
+tribool operator||(tribool first, tribool second);
+tribool operator!(tribool first);
 
 } // namespace intervalai
 

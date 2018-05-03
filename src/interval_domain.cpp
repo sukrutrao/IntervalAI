@@ -366,8 +366,28 @@ tribool Interval::operator==(const Interval &other) const {
 tribool intervalai::operator&&(tribool first, tribool second) {
     if (first == tribool::True && second == tribool::True) {
         return tribool::True;
+    } else if (first == tribool::False || second == tribool::False) {
+        return tribool::False;
+    }
+    return tribool::Unknown;
+}
+
+tribool intervalai::operator||(tribool first, tribool second) {
+    if (first == tribool::True || second == tribool::True) {
+        return tribool::True;
+    } else if (first == tribool::Unknown && second == tribool::Unknown) {
+        return tribool::Unknown;
     }
     return tribool::False;
+}
+
+tribool intervalai::operator!(tribool first) {
+    if (first == tribool::True) {
+        return tribool::False;
+    } else if (first == tribool::False) {
+        return tribool::True;
+    }
+    return tribool::Unknown;
 }
 
 tribool Interval::operator<=(const Interval &other) const {
