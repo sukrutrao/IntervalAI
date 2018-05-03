@@ -55,7 +55,7 @@ void Interval::view() {
     std::cout << ", ";
     if (high == limits.first) {
         std::cout << "-infty";
-    } else if (low == limits.second) {
+    } else if (high == limits.second) {
         std::cout << "infty";
     } else {
         std::cout << high;
@@ -142,12 +142,12 @@ Interval Interval::operator*(const Interval &other) const {
             result.low =
                 std::min(this->low * other.high, this->high * other.low);
             result.high = this->high * other.high;
-        } else if (this->high > 0 && other.high <= 0) {
+        } else if (this->high > 0 && other.high <= 0) { // TODO -check
             result.low = other.low * this->high;
             result.high = this->low * other.high;
         } else if (this->high <= 0 && other.high > 0) {
             result.low = this->low * other.high;
-            result.high = other.low * this->high;
+            result.high = other.low * this->low;
         } else {
             result.low = this->high * other.high;
             result.high = this->low * other.low;
