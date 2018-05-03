@@ -3,6 +3,7 @@
 
 #include "expr_handler.h"
 #include "interval_domain.h"
+#include "io_utils.h"
 #include <goto-programs/goto_program_template.h>
 #include <util/std_code.h>
 
@@ -13,10 +14,11 @@ namespace intervalai {
 class InstructionHandler {
 
   private:
+    RunMode mode;
 
   public:
     ExprHandler expr_handler;
-    InstructionHandler();
+    InstructionHandler(RunMode mode = RunMode::Automated);
     bool handleInstruction(instructiont);
 
     tribool handleGoto(instructiont);
@@ -28,7 +30,8 @@ class InstructionHandler {
     void handleAssign(instructiont);
     void handleDecl(instructiont);
     void handleDead(instructiont);
-    std::tuple<dstringt, dstringt, std::vector<Interval>> handleFunctionCall(instructiont);
+    std::tuple<dstringt, dstringt, std::vector<Interval>>
+        handleFunctionCall(instructiont);
 };
 
 }; // namespace intervalai

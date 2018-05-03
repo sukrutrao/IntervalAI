@@ -3,7 +3,7 @@
 
 using namespace intervalai;
 
-InstructionHandler::InstructionHandler() {}
+InstructionHandler::InstructionHandler(RunMode mode) { this->mode = mode; }
 
 bool InstructionHandler::handleInstruction(instructiont instruction) {
     if (instruction.is_assign()) {
@@ -28,7 +28,8 @@ bool InstructionHandler::handleInstruction(instructiont instruction) {
     } else if (instruction.is_assume()) {
         handleAssume(instruction);
     } else {
-        std::cout << "HANDLE THIS" << std::endl;
+        std::cout << "Unknown instruction type encountered" << std::endl;
+        return false;
     }
     return true;
 }
@@ -70,16 +71,20 @@ Interval InstructionHandler::handleReturn(instructiont instruction) {
     return ret;
 }
 
-void InstructionHandler::handleAssume(instructiont instruction) {}
+void InstructionHandler::handleAssume(instructiont instruction) { return; }
 
 tribool InstructionHandler::handleAssert(instructiont instruction) {
     auto assert = instruction.guard;
     // std::cout << assert.pretty() << std::endl;
     auto guard_val = expr_handler.handleBooleanExpr(assert);
     if (guard_val != tribool::True) {
-        std::cout << "BUG" << std::endl;
+        std::cout << "Assertion Failed. Instruction : "
+                  << instruction.location_number << std::endl;
     } else {
-        std::cout << "ASSERT PASS" << std::endl;
+        if (mode == RunMode::Interactive) {
+            std::cout << "Assertion Passed. Instruction : "
+                      << instruction.location_number << std::endl;
+        }
     }
     return guard_val;
     // std::cout << assert.operands().size() << std::endl;
@@ -87,12 +92,13 @@ tribool InstructionHandler::handleAssert(instructiont instruction) {
 
 void InstructionHandler::handleSkip(instructiont instruction) {}
 
-std::tuple<dstringt, dstringt, std::vector<Interval>> InstructionHandler::handleFunctionCall(instructiont instruction) {
-    auto func_call = static_cast<code_function_callt&>(instruction.code);
+std::tuple<dstringt, dstringt, std::vector<Interval>>
+InstructionHandler::handleFunctionCall(instructiont instruction) {
+    auto func_call = static_cast<code_function_callt &>(instruction.code);
     auto lhs = func_call.lhs().get_named_sub()["identifier"].id();
     auto func = func_call.function().get_named_sub()["identifier"].id();
     std::vector<Interval> intervals;
-    for (auto &op: func_call.arguments()) {
+    for (auto &op : func_call.arguments()) {
         // std::cout << op.pretty() << std::endl;
         if (op.has_operands()) {
             intervals.push_back(expr_handler.handleArithmeticExpr(op));

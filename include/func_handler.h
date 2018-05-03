@@ -3,12 +3,11 @@
 
 #include "instruction_handler.h"
 #include "interval_domain.h"
+#include "io_utils.h"
 #include <goto-programs/goto_model.h>
 #include <string>
 
 namespace intervalai {
-
-enum class RunMode { Interactive, Automated, Error };
 
 class FuncHandler {
   public:
@@ -21,6 +20,8 @@ class FuncHandler {
     RunMode mode;
     InstructionHandler instruction_handler;
     bool handleInstruction(std::_List_iterator<instructiont> current);
+    void displayInfo(std::_List_iterator<instructiont> current);
+    std::string prompt;
 };
 
 }; // namespace intervalai

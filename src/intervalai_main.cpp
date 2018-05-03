@@ -1,7 +1,6 @@
 #include "arg_parser.h"
 #include "func_handler.h"
 #include "io_utils.h"
-#include <iostream>
 #include <goto-programs/goto_model.h>
 #include <goto-programs/read_goto_binary.h>
 #include <iostream>
@@ -19,6 +18,7 @@ int main(int argc, char *argv[]) {
         intervalai::displayAbout();
         return 0;
     }
+    intervalai::displayTitle();
     intervalai::RunMode mode = intervalai::RunMode::Automated;
     if (arg_parser.argExists("-m")) {
         mode = arg_parser.getArgValue("-m");
@@ -44,7 +44,9 @@ int main(int argc, char *argv[]) {
 
     intervalai::FuncHandler func_handler(&model, mode);
 
-    func_handler.handleFunc("main");
+    auto result = func_handler.handleFunc("main");
+
+    intervalai::displayResult(result.first);
 
     return 0;
 }
