@@ -13,9 +13,9 @@ namespace intervalai {
 class InstructionHandler {
 
   private:
-    ExprHandler expr_handler;
 
   public:
+    ExprHandler expr_handler;
     InstructionHandler();
     bool handleInstruction(instructiont);
 
@@ -28,7 +28,7 @@ class InstructionHandler {
     void handleAssign(instructiont);
     void handleDecl(instructiont);
     void handleDead(instructiont);
-    void handleFunctionCall(instructiont);
+    std::tuple<dstringt, dstringt, std::vector<Interval>> handleFunctionCall(instructiont);
 };
 
 }; // namespace intervalai

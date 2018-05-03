@@ -36,7 +36,7 @@ bool InstructionHandler::handleInstruction(instructiont instruction) {
 }
 
 tribool InstructionHandler::handleGoto(instructiont instruction) {
-    std::cout << instruction.guard.pretty() << std::endl;
+    // std::cout << instruction.guard.pretty() << std::endl;
     return expr_handler.handleBooleanExpr(instruction.guard);
 }
 
@@ -78,6 +78,16 @@ tribool InstructionHandler::handleAssert(instructiont instruction) {
 
 void InstructionHandler::handleSkip(instructiont instruction) {}
 
-void InstructionHandler::handleFunctionCall(instructiont instruction) {}
+std::tuple<dstringt, dstringt, std::vector<Interval>> InstructionHandler::handleFunctionCall(instructiont instruction) {
+    auto func_call = static_cast<code_function_callt&>(instruction.code);
+    auto lhs = func_call.lhs().get_named_sub()["identifier"].id();
+    auto func = func_call.function().get_named_sub()["identifier"].id();
+    std::vector<Interval> intervals;
+    for (auto &op: func_call.arguments()) {
+        auto interval = expr_handler.handleArithmeticExpr(op);
+        intervals.push_back(interval);
+    }
+    return std::make_tuple(lhs, func, intervals);
+}
 
 void InstructionHandler::handleOther(instructiont instruction) {}
