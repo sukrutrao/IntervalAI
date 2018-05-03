@@ -105,6 +105,9 @@ tribool ExprHandler::handleRelationalExpr(exprt expr) {
 }
 
 Interval ExprHandler::handleArithmeticExpr(exprt expr) {
+    if (!expr.has_operands()) {
+        return get_interval(expr);
+    }
     assert(expr.id() == ID_plus || expr.id() == ID_minus ||
            expr.id() == ID_mult || expr.id() == ID_div);
     assert(expr.operands().size() == 2);
