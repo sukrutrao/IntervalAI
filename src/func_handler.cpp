@@ -81,6 +81,7 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
                     }
                     iter--;
                 }
+                return handleInstruction(++current);
             }
         }
         intervalai::tribool guard = instruction_handler.handleGoto(*current);
