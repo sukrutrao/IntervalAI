@@ -71,6 +71,11 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
             }
             loop_count[instruction.location_number] += 1;
             if (loop_count[instruction.location_number] >= widen_limit) {
+                std::cout << "Limit on number of iterations (" << widen_limit
+                          << ") reached." << std::endl
+                          << "Widening will be applied. Instruction : "
+                          << instruction.location_number << ", "
+                          << instruction.to_string() << std::endl;
                 auto iter = current;
                 while (iter != instruction.targets.front()) {
                     if ((*iter).is_assign()) {
@@ -94,7 +99,8 @@ bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
                 std::string input;
                 std::cout << prompt;
                 std::cout << "A branch has been encountered. Instruction : "
-                          << (*current).location_number << std::endl;
+                          << (*current).location_number << ", "
+                          << (*current).to_string() << std::endl;
                 std::cout
                     << "Select an option : (1) Then Branch, (2) Else Branch"
                     << std::endl;
@@ -133,6 +139,8 @@ void FuncHandler::displayInfo(std::_List_iterator<instructiont> current) {
         std::cout << prompt;
         std::cin >> input;
         if (input == "n") {
+            std::cout << "Executed instruction : " << (*current).location_number
+                      << ", " << (*current).to_string() << std::endl;
             return;
         } else if (input == "p") {
             for (auto &sym : instruction_handler.expr_handler.symbol_table) {
@@ -140,7 +148,7 @@ void FuncHandler::displayInfo(std::_List_iterator<instructiont> current) {
                           << std::endl;
             }
             std::cout << "Next instruction : " << (*current).location_number
-                      << std::endl;
+                      << ", " << (*current).to_string() << std::endl;
         } else {
             std::cout << "Invalid command" << std::endl;
         }

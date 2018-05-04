@@ -61,5 +61,4 @@ void intervalai::displayTitle() {
     std::cout << "IntervalAI : An restricted Abstract Interpreter based on the "
                  "integer interval domain"
               << std::endl;
-    std::cout << "By : Sukrut Rao, Prateek Kumar" << std::endl << std::endl;
 }

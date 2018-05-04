@@ -79,11 +79,13 @@ tribool InstructionHandler::handleAssert(instructiont instruction) {
     auto guard_val = expr_handler.handleBooleanExpr(assert);
     if (guard_val != tribool::True) {
         std::cout << "Assertion Failed. Instruction : "
-                  << instruction.location_number << std::endl;
+                  << instruction.location_number << ", "
+                  << instruction.to_string() << std::endl;
     } else {
         if (mode == RunMode::Interactive) {
             std::cout << "Assertion Passed. Instruction : "
-                      << instruction.location_number << std::endl;
+                      << instruction.location_number << ", "
+                      << instruction.to_string() << std::endl;
         }
     }
     return guard_val;
