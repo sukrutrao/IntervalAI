@@ -13,7 +13,9 @@ FuncHandler::FuncHandler(goto_modelt *m, unsigned int widen_limit, RunMode mode)
         std::cout << "IntervalAI will run in interactive mode. Each "
                      "instruction will be executed step-wise. Use the "
                      "following commands:\np : display the current state and "
-                     "the next instruction\nn : execute the next instruction"
+                     "the next instruction\nn : execute the next "
+                     "instruction\nw : maximum number of iterations after "
+                     "which the loop will be widened"
                   << std::endl;
         std::cout << "When a branch is encountered, you will be prompted to "
                      "specify which branch to take. The specified branch will "

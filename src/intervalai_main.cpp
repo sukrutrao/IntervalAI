@@ -20,11 +20,15 @@ int main(int argc, char *argv[]) {
     }
     intervalai::displayTitle();
     intervalai::RunMode mode = intervalai::RunMode::Automated;
+    unsigned widen_limit = 100;
     if (arg_parser.argExists("-m")) {
-        mode = arg_parser.getArgValue("-m");
+        mode = arg_parser.getModeValue("-m");
         if (mode == intervalai::RunMode::Error) {
             intervalai::displayUnknownMode();
         }
+    }
+    if (arg_parser.argExists("-w")) {
+        widen_limit = arg_parser.getIntValue("-w");
     }
     std::string goto_binary_name = std::string(argv[argc - 1]);
     if (!intervalai::fileExists(goto_binary_name)) {
@@ -41,8 +45,6 @@ int main(int argc, char *argv[]) {
         std::cout << "err" << std::endl;
         return 1;
     }
-
-    unsigned widen_limit = 100;
 
     intervalai::FuncHandler func_handler(&model, widen_limit, mode);
 

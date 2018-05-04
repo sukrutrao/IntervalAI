@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 using namespace intervalai;
 
@@ -18,7 +20,7 @@ bool ArgParser::argExists(std::string check_arg) {
     return false;
 }
 
-RunMode ArgParser::getArgValue(std::string get_arg) {
+RunMode ArgParser::getModeValue(std::string get_arg) {
     if (std::find(args.begin(), args.end(), get_arg) == args.end()) {
         return RunMode::Error;
     }
@@ -32,4 +34,18 @@ RunMode ArgParser::getArgValue(std::string get_arg) {
         }
     }
     return RunMode::Error;
+}
+
+unsigned ArgParser::getIntValue(std::string get_arg) {
+    if (std::find(args.begin(), args.end(), get_arg) == args.end()) {
+        return -1;
+    }
+    auto it = std::find(args.begin(), args.end(), get_arg);
+    it++;
+    if (it != args.end()) {
+        std::istringstream ss(*it);
+        int result;
+        ss >> result;
+        return result;
+    }
 }

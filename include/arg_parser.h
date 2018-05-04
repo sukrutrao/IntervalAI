@@ -14,7 +14,8 @@ class ArgParser {
   public:
     ArgParser(int, char **);
     bool argExists(std::string);
-    RunMode getArgValue(std::string);
+    RunMode getModeValue(std::string);
+    unsigned getIntValue(std::string);
 };
 
 } // namespace intervalai
