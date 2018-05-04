@@ -92,7 +92,6 @@ void Interval::invariant() {
         low = limits.first;
     if (high > limits.second)
         high = limits.second;
-    // Check - TODO
     if (low > limits.second) {
         low = limits.second;
     }
@@ -111,7 +110,6 @@ Interval Interval::operator+(const Interval &other) const {
     result.low = this->low + other.low;
     result.high = this->high + other.high;
     result.invariant();
-    // this->view(); other.view(); result.view();
     return result;
 }
 

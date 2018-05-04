@@ -11,7 +11,8 @@ namespace intervalai {
 
 class FuncHandler {
   public:
-    FuncHandler(goto_modelt *model, unsigned int widen_limit = 100, RunMode mode = RunMode::Automated);
+    FuncHandler(goto_modelt *model, unsigned int widen_limit = 100,
+                RunMode mode = RunMode::Automated);
     std::pair<bool, Interval> handleFunc(std::string func_name);
 
   private:

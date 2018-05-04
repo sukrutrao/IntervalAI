@@ -7,37 +7,16 @@
 using namespace intervalai;
 
 std::map<irep_idt, Interval> ExprHandler::symbol_table;
-// std::map<irep_idt, std::function<Interval(exprt)>> ExprHandler::function_map;
 std::map<irep_idt, std::function<Interval(Interval &, Interval &)>>
     ExprHandler::arithmetic_ops;
 
 ExprHandler::ExprHandler() {
-    // function_map.emplace(ID_plus, handleArithmeticExpr);
-    // function_map.emplace(ID_minus, handleArithmeticExpr);
-    // function_map.emplace(ID_mult, handleArithmeticExpr);
-    // function_map.emplace(ID_div, handleArithmeticExpr);
-    // function_map.emplace(ID_lt, handleRelationalExpr);
-    // function_map.emplace(ID_gt, handleRelationalExpr);
-    // function_map.emplace(ID_le, handleRelationalExpr);
-    // function_map.emplace(ID_ge, handleRelationalExpr);
-    // function_map.emplace(ID_equal, handleRelationalExpr);
+
     arithmetic_ops.emplace(ID_plus, std::plus<Interval>());
     arithmetic_ops.emplace(ID_minus, std::minus<Interval>());
     arithmetic_ops.emplace(ID_mult, std::multiplies<Interval>());
     arithmetic_ops.emplace(ID_div, std::divides<Interval>());
-    // relational_ops.emplace(ID_lt, std::less<Interval()>());
-    // relational_ops.emplace(ID_gt, std::greater<Interval()>());
-    // relational_ops.emplace(ID_le, std::less_equal<Interval()>());
-    // relational_ops.emplace(ID_ge, std::greater_equal<Interval()>());
-    // relational_ops.emplace(ID_equal, std::equal_to<Interval()>());
-    // logical_ops.emplace(ID_and, std::logical_and<tribool>());
-    // logical_ops.emplace(ID_or, std::logical_or<tribool>());
-    // logical_ops.emplace(ID_not, std::logical_not<tribool>());
 }
-
-// Interval ExprHandler::handleExpr(exprt expr) {
-//     return function_map.at(expr.id())(expr);
-// }
 
 tribool ExprHandler::handleBooleanExpr(exprt expr) {
     assert(expr.id() == ID_lt || expr.id() == ID_gt || expr.id() == ID_le ||
@@ -105,7 +84,6 @@ tribool ExprHandler::handleRelationalExpr(exprt expr) {
 }
 
 Interval ExprHandler::handleArithmeticExpr(exprt expr) {
-    // std::cout << expr.pretty() << std::endl;
     if (!expr.has_operands()) {
         return get_interval(expr);
     }
@@ -132,18 +110,8 @@ Interval ExprHandler::handleArithmeticExpr(exprt expr) {
     return result;
 }
 
-#include <iostream>
-
 Interval ExprHandler::get_interval(exprt expr) {
-    // for (auto &s: symbol_table) {
-    //     std::cout << s.first << " ";
-    //     s.second.view();
-    //     std::cout << std::endl;
-    // }
     auto expr_map = expr.get_named_sub();
-    // for (auto &e: expr_map) {
-    //     std::cout << e.first << " " << e.second.id() << std::endl;
-    // }
     if (expr_map.find("identifier") != expr_map.end()) {
 
         return symbol_table.at(expr_map["identifier"].id());
@@ -152,7 +120,7 @@ Interval ExprHandler::get_interval(exprt expr) {
             std::stoi(expr_map["value"].id_string(), nullptr, 2);
         return Interval(constant_value, constant_value);
     } else {
-        assert(false); // TODO: remove this
+        assert(false);
     }
     return Interval(true);
 }

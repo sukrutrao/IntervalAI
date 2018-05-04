@@ -13,14 +13,8 @@ namespace intervalai {
 class ExprHandler {
 
   private:
-    // static std::map<irep_idt, std::function<Interval(exprt)>> function_map;
     static std::map<irep_idt, std::function<Interval(Interval &, Interval &)>>
         arithmetic_ops;
-    // static std::map<irep_idt, std::function<tribool(Interval &, Interval &)>>
-    //     relational_ops;
-    // static std::map<irep_idt, std::function<tribool(tribool, tribool)>>
-    //     logical_ops;
-
 
   public:
     ExprHandler();

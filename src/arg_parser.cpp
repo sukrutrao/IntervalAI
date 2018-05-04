@@ -42,10 +42,12 @@ unsigned ArgParser::getIntValue(std::string get_arg) {
     }
     auto it = std::find(args.begin(), args.end(), get_arg);
     it++;
+    int result = -1;
     if (it != args.end()) {
         std::istringstream ss(*it);
-        int result;
+
         ss >> result;
         return result;
     }
+    return result;
 }

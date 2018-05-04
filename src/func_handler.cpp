@@ -30,12 +30,10 @@ FuncHandler::FuncHandler(goto_modelt *m, unsigned int widen_limit, RunMode mode)
 
 bool FuncHandler::handleInstruction(std::_List_iterator<instructiont> current) {
     displayInfo(current);
-    //    std::cout << (*current).to_string() << std::endl;
     auto instruction = *current;
     if (instruction.is_return()) {
         Interval interval = instruction_handler.handleReturn(instruction);
         func_return = interval;
-        //    std::cout << func_return.to_string() << std::endl;
         loop_count.clear();
         return true;
     }
@@ -163,12 +161,7 @@ std::pair<bool, Interval> FuncHandler::handleFunc(std::string func_name) {
     intervalai::InstructionHandler instruction_handler;
     auto params =
         model->goto_functions.function_map[func_name].type.parameters();
-    // for (auto &param : params) {
-    //     std::cout << instruction_handler.expr_handler
-    //                      .symbol_table[param.get_identifier()]
-    //                      .to_string()
-    //               << std::endl;
-    // }
+
     bool is_safe = handleInstruction(instructions.begin());
     return std::make_pair(is_safe, func_return);
 }

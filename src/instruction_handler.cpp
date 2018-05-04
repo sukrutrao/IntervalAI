@@ -35,7 +35,6 @@ bool InstructionHandler::handleInstruction(instructiont instruction) {
 }
 
 tribool InstructionHandler::handleGoto(instructiont instruction) {
-    // std::cout << instruction.guard.pretty() << std::endl;
     if (instruction.guard.is_true()) {
         return tribool::True;
     }
@@ -58,16 +57,13 @@ void InstructionHandler::handleDead(instructiont instruction) {
 void InstructionHandler::handleAssign(instructiont instruction) {
     auto assign = static_cast<code_assignt &>(instruction.code);
     auto interval = expr_handler.handleArithmeticExpr(assign.rhs());
-    // std::cout << "RHS parsed" << std::endl;
     expr_handler.symbol_table[assign.lhs().get_named_sub()["identifier"].id()] =
         interval;
 }
 
 Interval InstructionHandler::handleReturn(instructiont instruction) {
     auto return_i = static_cast<code_returnt &>(instruction.code);
-    // std::cout << return_i.return_value().pretty() << std::endl;
     auto ret = expr_handler.handleArithmeticExpr(return_i.return_value());
-    // std::cout << "RET" << ret.to_string() << std::endl;
     return ret;
 }
 
@@ -89,7 +85,6 @@ tribool InstructionHandler::handleAssert(instructiont instruction) {
         }
     }
     return guard_val;
-    // std::cout << assert.operands().size() << std::endl;
 }
 
 void InstructionHandler::handleSkip(instructiont instruction) {}
@@ -101,7 +96,6 @@ InstructionHandler::handleFunctionCall(instructiont instruction) {
     auto func = func_call.function().get_named_sub()["identifier"].id();
     std::vector<Interval> intervals;
     for (auto &op : func_call.arguments()) {
-        // std::cout << op.pretty() << std::endl;
         if (op.has_operands()) {
             intervals.push_back(expr_handler.handleArithmeticExpr(op));
         } else {

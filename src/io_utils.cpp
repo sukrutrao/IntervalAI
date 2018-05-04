@@ -27,6 +27,9 @@ void intervalai::displayHelp(std::string name) {
                  "stepwise, and provides an opportunity to inspect the state "
                  "after each step and visualize the execution of instructions"
               << std::endl
+              << "-w <widen-limit> - specify the maximum number of iterations "
+                 "a loop is run before it is widened."
+              << std::endl
               << "-h - view help" << std::endl
               << "-v - view about" << std::endl;
 }
