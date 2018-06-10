@@ -1,4 +1,7 @@
 language: cpp
+branches:
+    only:
+    - ci
 compiler:
     - g++
 before_install:
