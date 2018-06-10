@@ -1,12 +1,12 @@
 language: cpp
-branches:
-    only:
-    - ci
 compiler:
     - g++
+before_install:
+    - sudo apt install flex bison libwww-perl patch
 script:
-    - cd cbmc/src 
-    - make 
+    - cd cbmc/src
+    - make minisat2-download
+    - make
     - cd ../../
     - mkdir build
     - cd build
