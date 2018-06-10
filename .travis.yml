@@ -1,0 +1,16 @@
+language: cpp
+dist: xenial
+compiler:
+    - g++
+before_install:
+    - sudo apt update
+    - sudo apt install -y flex bison libwww-perl patch
+script:
+    - cd cbmc/src
+    - make minisat2-download
+    - make
+    - cd ../../
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
