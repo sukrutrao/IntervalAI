@@ -251,7 +251,10 @@ tribool Interval::operator<(const Interval &other) const {
     if (this->high < other.low) {
         return tribool::True;
     }
-    return tribool::False;
+    Interval meet = operator&(other);
+    if (meet.is_bot)
+        return tribool::False;
+    return tribool::Unknown;
 }
 
 tribool Interval::operator>(const Interval &other) const {
@@ -269,7 +272,7 @@ tribool Interval::operator==(const Interval &other) const {
     if (this->length() == 0 && other.length() == 0 && this->low == other.low) {
         return tribool::True;
     }
-    return tribool::False;
+    return tribool::Unknown;
 }
 
 tribool Interval::operator!=(const Interval &other) const {
