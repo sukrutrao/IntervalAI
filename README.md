@@ -1,5 +1,7 @@
 # Interval Domain Abstract Interpreter
 
+[![Build Status](https://travis-ci.com/GoodDeeds/interval-domain-abstract-interpreter.svg?branch=dev)](https://travis-ci.com/GoodDeeds/interval-domain-abstract-interpreter)
+
 IntervalAI : An restricted Abstract Interpreter based on the integer interval domain
 
 ## Prerequisites
