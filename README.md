@@ -6,12 +6,12 @@ An abstract interpreter based on the integer interval domain for simple C progra
 
 ## Setup
 
-## Prerequisites
+### Prerequisites
 
 * CBMC 5.8 (included as a submodule)
 * g++ with C++11 support
 
-## Building the project
+### Building the project
 
 Get the code. The directory containing this file shall be referred to as `$INTERVALAI_ROOT`
 
