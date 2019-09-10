@@ -1,6 +1,6 @@
 # IntervalAI
 
-[![Build Status](https://travis-ci.com/GoodDeeds/IntervalAI.svg?branch=dev)](https://travis-ci.com/GoodDeeds/IntervalAI)
+[![Build Status](https://travis-ci.com/sukrutrao/IntervalAI.svg?branch=dev)](https://travis-ci.com/sukrutrao/IntervalAI)
 
 An abstract interpreter based on the integer interval domain for simple C programs
 
@@ -16,7 +16,7 @@ An abstract interpreter based on the integer interval domain for simple C progra
 Get the code. The directory containing this file shall be referred to as `$INTERVALAI_ROOT`
 
 ```bash
-$ git clone --recurse-submodules https://github.com/GoodDeeds/IntervalAI $INTERVALAI_ROOT
+$ git clone --recurse-submodules https://github.com/sukrutrao/IntervalAI $INTERVALAI_ROOT
 ```
 
 Build CBMC
@@ -52,5 +52,4 @@ $ ./IntervalAI -h
 ## License
 This code is provided under the [MIT License](LICENSE).
 
-
-**Note:** The code has a few [known bugs](https://github.com/GoodDeeds/IntervalAI/issues), which are in the process of getting resolved.
+**Note:** The code has a few [known bugs](https://github.com/sukrutrao/IntervalAI/issues), which are in the process of getting resolved.
